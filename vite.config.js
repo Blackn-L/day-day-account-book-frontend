@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import styleImport from "vite-plugin-style-import";
-
+import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -39,6 +39,14 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // 将 /api 重写为空
       },
+    },
+  },
+
+  // 配置路径别名
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"), // src 路径
+      utils: path.resolve(__dirname, "src/utils"), // utils 路径
     },
   },
 });
