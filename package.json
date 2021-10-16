@@ -7,10 +7,12 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "vant": "^3.2.5",
     "vue": "^3.2.16"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",
-    "vite": "^2.6.4"
+    "vite": "^2.6.4",
+    "vite-plugin-style-import": "^1.2.1"
   }
 }
