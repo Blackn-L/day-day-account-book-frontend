@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",
+    "less": "^4.1.2",
     "vite": "^2.6.4",
     "vite-plugin-style-import": "^1.2.1"
   }
