@@ -4,9 +4,11 @@
 </script>
 
 <template>
-  <van-button type="primary" >主要按钮</van-button>
+  <van-button type="primary">主要按钮</van-button>
   <van-icon name="chat-o" />
+  <div class="index"></div>
 </template>
 
 <style lang="less">
+
 </style>

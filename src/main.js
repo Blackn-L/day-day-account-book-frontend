@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import 'lib-flexible/flexible'
 import { Button,Icon } from "vant";
 
 const app = createApp(App);
