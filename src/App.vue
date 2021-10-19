@@ -6,6 +6,7 @@ import Tabbar from "./components/Tabbar.vue";
 import { useRoute } from "vue-router";
 const showTabbar = ref(true);
 const route = useRoute();
+// 不需要展示标签栏的路由
 const noShowTabbarRouteList = ["/login"];
 watchEffect(() => {
   showTabbar.value = !noShowTabbarRouteList.includes(route.path);
