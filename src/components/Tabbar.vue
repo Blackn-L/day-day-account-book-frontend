@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-const activeTab = ref(0);
+const activeTab = ref<string>("bill");
 </script>
 
 <template>
