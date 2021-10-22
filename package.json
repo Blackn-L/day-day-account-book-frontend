@@ -1,5 +1,5 @@
 {
-  "name": "day-day-account-book",
+  "name": "day-day-account-book-frontend",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
