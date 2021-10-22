@@ -20,10 +20,11 @@ const activeTab = ref<string>("login");
 <style lang="less" scoped>
 .wrapper {
   height: 100vh;
-  background-image: url("../../../public/login_background.jpeg");
+  background-image: url("@/assets/login_background.jpeg");
   padding-top: 25vh;
 }
 .main {
   min-height: 30vh;
+  margin: 10px;
 }
 </style>
