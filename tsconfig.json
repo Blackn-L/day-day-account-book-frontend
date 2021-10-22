@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
+    // TypeScript 默认会把代码编译为 ECMAScript 3
+    // esnext 表示仅仅校验转换 TypeScript 类型，不进行语法编译
     "target": "esnext",
     "module": "esnext",
     // 这样就可以对 `this` 上的数据属性进行更严格的推断
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "types": ["vite/client"], // 增加对 vite 环境变量类型等支持，https://cn.vitejs.dev/guide/features.html#client-types
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     }
   },
+  "include": ["src/**/*.ts", "src/**/*.vue"],
   "exclude": ["node_modules", "dist", ".husky"]
 }
