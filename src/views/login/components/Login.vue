@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { login } from "@/api/login";
+interface LoginData {
+  token: string;
+}
 const username = ref<string>("");
 const password = ref<string>("");
 const onSubmit = async (values: Object) => {
   console.log("submit", values);
   try {
-    const { data } = await login({
+    let {data} = await login({
       username: username.value,
       password: password.value,
     });
+    // if (data.token) {
+    //   window.localStorage.setItem("token", data.token);
+    // }
     console.log("data: ", data);
   } catch (error) {
     console.log("error: ", error);
