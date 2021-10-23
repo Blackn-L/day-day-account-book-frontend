@@ -1,7 +1,26 @@
-# Vue 3 + Vite
+# 呆呆记账本
+> 自己写的移动端记账本
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 在线体验
+待部署
+## 技术栈
+* Vue3 + Typescript + Vite + Vant3 + Axios
 
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+## 页面
+* 注册/登录(开发 ing)
+* 账单列表(待开发)
+* 账单详情(待开发)
+* 账单统计(待开发)
+* 个人中心(待开发)
+## 后端
+待上传
+## 构建步骤
+``` bash
+# 克隆项目
+git@github.com:Blackn-L/day-day-account-book-frontend.git
+# 进入项目目录
+cd day-day-account-book-frontend
+# 安装依赖，推荐 yarn
+yarn
+#  启动项目
+yarn dev
