@@ -2,24 +2,143 @@
 import { ref, reactive, computed } from "vue";
 import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
-import { BillType } from "./index";
+import { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
 
-const totalExpenses = ref(63444);
-const totalIncome = ref(1411);
-const showType = ref(false);
-const showDate = ref(false);
+const totalExpenses = ref(63444); // 总支出
+const totalIncome = ref(1411); // 总收入
+const showType = ref(false); // 选择账单类型弹窗
+const showDate = ref(false); // 选择账单日期弹窗
+// 已选账单类型
 const selectedType = reactive<BillType>({
   id: 0,
   name: "全部类型",
 });
-
+const listLoading = ref(true); // 账单列表加载状态
+const listFinished = ref(false); // 账单列表是否已加载完毕
+const listRefreshing = ref(false); // 账单列表是否正在刷新
 // 最早为 2020 年 1 月 1 日
 const minDate = ref(new Date(2020, 0, 1));
 // 最迟为当前时间
 const maxDate = ref(new Date());
 const selectedDate = ref(new Date());
-
+const billList = reactive<Bill[]>([
+  {
+    date: "2021-10-18",
+    bills: [
+      {
+        id: 2606,
+        pay_type: 2,
+        amount: "400.00",
+        date: "1634522059000",
+        type_id: 11,
+        type_name: "工资",
+        remark: "",
+      },
+      {
+        id: 2609,
+        pay_type: 1,
+        amount: "88.00",
+        date: "1634550899000",
+        type_id: 6,
+        type_name: "学习",
+        remark: "",
+      },
+      {
+        id: 2610,
+        pay_type: 1,
+        amount: "25.00",
+        date: "1634569499000",
+        type_id: 1,
+        type_name: "餐饮",
+        remark: "",
+      },
+    ],
+  },
+  {
+    date: "2021-10-17",
+    bills: [
+      {
+        id: 2603,
+        pay_type: 1,
+        amount: "22.00",
+        date: "1634449416000",
+        type_id: 2,
+        type_name: "服饰",
+        remark: "",
+      },
+      {
+        id: 2604,
+        pay_type: 1,
+        amount: "25.00",
+        date: "1634449424000",
+        type_id: 6,
+        type_name: "学习",
+        remark: "",
+      },
+    ],
+  },
+  {
+    date: "2021-10-14",
+    bills: [
+      {
+        id: 2592,
+        pay_type: 1,
+        amount: "222.00",
+        date: "1634193029000",
+        type_id: 5,
+        type_name: "购物",
+        remark: "掘金小册",
+      },
+      {
+        id: 2593,
+        pay_type: 1,
+        amount: "30.00",
+        date: "1634200474000",
+        type_id: 9,
+        type_name: "人情",
+        remark: "小册",
+      },
+    ],
+  },
+  {
+    date: "2021-10-12",
+    bills: [
+      {
+        id: 2583,
+        pay_type: 2,
+        amount: "12.00",
+        date: "1634022697000",
+        type_id: 16,
+        type_name: "其他",
+        remark: "",
+      },
+    ],
+  },
+  {
+    date: "2021-10-11",
+    bills: [
+      {
+        id: 2563,
+        pay_type: 1,
+        amount: "5.00",
+        date: "1633907515000",
+        type_id: 6,
+        type_name: "学习",
+        remark: "",
+      },
+      {
+        id: 2564,
+        pay_type: 1,
+        amount: "8.00",
+        date: "1633907522000",
+        type_id: 6,
+        type_name: "学习",
+        remark: "",
+      },
+    ],
+  },
+]);
 // 计算属性
 // 选中的时间格式化
 const shouSelectedDate = computed(() => {
@@ -36,34 +155,53 @@ const handelChangeDate = (date: Date) => {
   showDate.value = false;
   selectedDate.value = date;
 };
+
+// 下拉刷新
+const onRefresh = () => {};
+
+//
+const onLoad = () => {};
 </script>
 
 <template>
-  <div class="bill-header">
-    <div class="total">
-      <div>
-        <span>总支出：</span>
-        <span class="total-count">{{ `￥${totalExpenses}` }}</span>
+  <van-pull-refresh v-model="listRefreshing" @refresh="onRefresh">
+    <div class="bill-header">
+      <div class="total">
+        <div>
+          <span>总支出：</span>
+          <span class="total-count">{{ `￥${totalExpenses}` }}</span>
+        </div>
+        <div style="margin-left: 15px">
+          <span>总收入：</span>
+          <span class="total-count">{{ `￥${totalIncome}` }}</span>
+        </div>
       </div>
-      <div style="margin-left: 15px">
-        <span>总收入：</span>
-        <span class="total-count">{{ `￥${totalIncome}` }}</span>
+      <div class="select-type-date">
+        <div>
+          <span @click="showType = true"
+            >{{ selectedType.name }} <van-icon name="arrow-down"
+          /></span>
+        </div>
+        <div style="margin-left: 10px">
+          <span @click="showDate = true"
+            >{{ shouSelectedDate }} <van-icon name="arrow-down"
+          /></span>
+        </div>
       </div>
     </div>
-    <div class="select-type-date">
-      <div>
-        <span @click="showType = true"
-          >{{ selectedType.name }} <van-icon name="arrow-down"
-        /></span>
-      </div>
-      <div style="margin-left: 10px">
-        <span @click="showDate = true"
-          >{{ shouSelectedDate }} <van-icon name="arrow-down"
-        /></span>
-      </div>
+
+    <div class="bill-list">
+      <van-list
+        v-model:loading="listLoading"
+        :finished="listFinished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <BillItem v-for="item in billList" :item="item" :key="item.date" />
+      </van-list>
     </div>
-  </div>
-    <BillItem />
+  </van-pull-refresh>
+
   <!-- 账单类型弹窗 -->
   <van-popup v-model:show="showType" position="bottom"
     ><BillTypes @handle-change-type="handleChangeType"
@@ -86,24 +224,30 @@ const handelChangeDate = (date: Date) => {
   background-color: #007fff;
   color: #fff;
   font-size: 14px;
-}
-.total {
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px 20px;
-}
-.total-count {
-  font-size: 20px;
-  font-weight: bold;
-}
-.select-type-date {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 10px 8px;
-  div {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 30px;
-    padding: 2px 10px;
+
+  .total {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    .total-count {
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
+
+  .select-type-date {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px 8px;
+    div {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 30px;
+      padding: 2px 10px;
+    }
+  }
+}
+.bill-list {
+  background-color: #f7f8fa;
+  padding: 0 10px 10px;
 }
 </style>

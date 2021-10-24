@@ -18,6 +18,9 @@ import {
   DatetimePicker,
   Cell,
   CellGroup,
+  Tag,
+  List,
+  PullRefresh,
 } from "vant";
 import router from "./router";
 
@@ -38,6 +41,9 @@ app
   .use(Divider)
   .use(DatetimePicker)
   .use(Cell)
-  .use(CellGroup);
+  .use(CellGroup)
+  .use(Tag)
+  .use(List)
+  .use(PullRefresh);
 app.use(router);
 app.mount("#app");
