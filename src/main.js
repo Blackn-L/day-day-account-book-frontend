@@ -9,9 +9,15 @@ import {
   TabbarItem,
   Form,
   Field,
-  CellGroup,
   Tab,
   Tabs,
+  Popup,
+  Grid,
+  GridItem,
+  Divider,
+  DatetimePicker,
+  Cell,
+  CellGroup,
 } from "vant";
 import router from "./router";
 
@@ -24,8 +30,14 @@ app
   .use(TabbarItem)
   .use(Form)
   .use(Field)
-  .use(CellGroup)
   .use(Tab)
-  .use(Tabs);
+  .use(Tabs)
+  .use(Popup)
+  .use(Grid)
+  .use(GridItem)
+  .use(Divider)
+  .use(DatetimePicker)
+  .use(Cell)
+  .use(CellGroup);
 app.use(router);
 app.mount("#app");
