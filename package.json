@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.23.0",
+    "dayjs": "^1.10.7",
     "lib-flexible": "^0.3.2",
     "postcss-pxtorem": "^6.0.0",
     "vant": "^3.2.5",
