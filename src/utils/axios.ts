@@ -5,12 +5,7 @@ interface ResponseData {
   message: string;
   data: object;
 }
-// interface useAxiosPesponse extends AxiosResponse {
-//   data: ResponseData;
-// }
-interface AxiosResponse {
-  data: ResponseData;
-}
+
 const MODE = import.meta.env.MODE; // 环境变量
 console.log("MODE: ", MODE);
 const service = axios.create({
@@ -25,14 +20,15 @@ const service = axios.create({
 });
 
 service.interceptors.response.use((res: AxiosResponse) => {
+  const data = res.data as ResponseData;
   // 请求失败
   if (typeof res.data !== "object") {
     Toast.fail("服务端异常！");
     return Promise.reject(res);
   }
-  if (res.data.code != 200) {
-    if (res.data?.message) Toast.fail(res.data?.message);
-    if (res.data?.code == 401) {
+  if (data.code != 200) {
+    if (data.message) Toast.fail(data.message);
+    if (data.code == 401) {
       window.location.href = "/login";
     }
     return Promise.reject(res.data);
