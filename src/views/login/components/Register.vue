@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { register } from "@/api/login";
 const username = ref<string>("");
 const password = ref<string>("");
 const onSubmit = (values: Object) => {
+  // register(values).then;
   console.log("submit", values);
 };
 </script>
@@ -36,6 +38,4 @@ const onSubmit = (values: Object) => {
   </van-form>
 </template>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

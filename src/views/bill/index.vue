@@ -2,6 +2,7 @@
 import { ref, reactive, computed } from "vue";
 import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
+import AddBill from "./components/AddBill.vue";
 import { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
 
@@ -9,6 +10,7 @@ const totalExpenses = ref(63444); // 总支出
 const totalIncome = ref(1411); // 总收入
 const showType = ref(false); // 选择账单类型弹窗
 const showDate = ref(false); // 选择账单日期弹窗
+const showAddPop = ref(false); // 添加账单弹窗
 // 已选账单类型
 const selectedType = reactive<BillType>({
   id: 0,
@@ -164,6 +166,7 @@ const onLoad = () => {};
 </script>
 
 <template>
+  <!-- 主体 -->
   <van-pull-refresh v-model="listRefreshing" @refresh="onRefresh">
     <div class="bill-header">
       <div class="total">
@@ -200,7 +203,19 @@ const onLoad = () => {};
         <BillItem v-for="item in billList" :item="item" :key="item.date" />
       </van-list>
     </div>
+
+    <!-- 添加账单按钮 -->
+    <div class="add-button">
+      <van-button round plain size="large" @click="showAddPop=true">
+        <van-icon name="records" size="32" color="#007fff" />
+      </van-button>
+    </div>
   </van-pull-refresh>
+
+  <!-- 添加账单弹窗 -->
+  <van-popup v-model:show="showAddPop" position="bottom"
+    ><AddBill @handle-change-type="handleChangeType"
+  /></van-popup>
 
   <!-- 账单类型弹窗 -->
   <van-popup v-model:show="showType" position="bottom"
@@ -249,5 +264,16 @@ const onLoad = () => {};
 .bill-list {
   background-color: #f7f8fa;
   padding: 0 10px 10px;
+}
+
+.add-button {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  z-index: 999;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
 }
 </style>
