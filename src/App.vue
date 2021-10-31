@@ -20,10 +20,9 @@ watchEffect(() => {
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .app {
   min-height: 100vh;
-  color: #455a6499;
   body,
   div,
   dl,

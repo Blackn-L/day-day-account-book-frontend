@@ -157,7 +157,15 @@ const handelChangeDate = (date: Date) => {
   showDate.value = false;
   selectedDate.value = date;
 };
-
+const formatter = (type: DatetimePickerColumnType, val: number) => {
+  if (type === "year") {
+    return `${val}年`;
+  }
+  if (type === "month") {
+    return `${val}月`;
+  }
+  return val;
+};
 // 下拉刷新
 const onRefresh = () => {};
 
@@ -206,7 +214,7 @@ const onLoad = () => {};
 
     <!-- 添加账单按钮 -->
     <div class="add-button">
-      <van-button round plain size="large" @click="showAddPop=true">
+      <van-button round plain size="large" @click="showAddPop = true">
         <van-icon name="records" size="32" color="#007fff" />
       </van-button>
     </div>
@@ -225,11 +233,13 @@ const onLoad = () => {};
   <!-- 账单时间弹窗 -->
   <van-popup v-model:show="showDate" position="bottom"
     ><van-datetime-picker
+      style="margin: 10px"
       v-model="selectedDate"
       type="year-month"
       title="选择年月"
       :min-date="minDate"
       :max-date="maxDate"
+      :formatter="formatter"
       @confirm="handelChangeDate"
   /></van-popup>
 </template>
@@ -263,7 +273,7 @@ const onLoad = () => {};
 }
 .bill-list {
   background-color: #f7f8fa;
-  padding: 0 10px 10px;
+  padding: 1px 0 10px;
 }
 
 .add-button {
