@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { Toast } from "vant";
-interface ResponseData {
+interface ResponseData<T = any> {
   code: number;
   message: string;
-  data: object;
+  data: T;
 }
 
 const MODE = import.meta.env.MODE; // 环境变量
