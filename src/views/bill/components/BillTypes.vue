@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from "vue";
-import { BillType } from "../index";
+import type { BillType } from "../index";
+
+const { types } = defineProps<{
+  types: BillType[];
+}>();
 const emit = defineEmits(["handle-change-type"]);
 const dividerStyle = {
   fontSize: "18px",
@@ -8,59 +12,6 @@ const dividerStyle = {
   borderColor: "#bdc3c7",
   marginBottom: "5px",
 };
-let types = reactive<BillType[]>([]);
-types = [
-  {
-    id: 1,
-    name: "餐饮",
-    type: 1,
-  },
-  {
-    id: 2,
-    name: "交通",
-    type: 1,
-  },
-  {
-    id: 3,
-    name: "娱乐",
-    type: 1,
-  },
-  {
-    id: 4,
-    name: "购物",
-    type: 1,
-  },
-  {
-    id: 5,
-    name: "其他",
-    type: 1,
-  },
-  {
-    id: 6,
-    name: "工资",
-    type: 2,
-  },
-  {
-    id: 7,
-    name: "奖金",
-    type: 2,
-  },
-  {
-    id: 8,
-    name: "转账",
-    type: 2,
-  },
-  {
-    id: 9,
-    name: "理财",
-    type: 2,
-  },
-  {
-    id: 10,
-    name: "其他",
-    type: 2,
-  },
-];
 let selectedTypeId = ref(0);
 const expenseTypes = computed(() => {
   return types.filter((item) => item.type === 1);

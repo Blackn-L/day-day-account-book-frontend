@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { ref, PropType, computed } from "vue";
-import { Bill, BillItem } from "../index";
+import { ref, computed } from "vue";
+import type { Bill, BillItem } from "../index";
 import * as dayjs from "dayjs";
 
-//  props 使用自定义类型，需要借助 PropType https://v3.cn.vuejs.org/guide/typescript-support.html#%E6%B3%A8%E8%A7%A3-props
-const props = defineProps({
-  item: {
-    type: Object as PropType<Bill>,
-    required: true,
-  },
-});
+//  https://v3.cn.vuejs.org/api/sfc-script-setup.html#%E4%BB%85%E9%99%90-typescript-%E7%9A%84%E5%8A%9F%E8%83%BD
+const props = defineProps<{
+  item: Bill;
+}>();
 
 // 当日总支出
 const totalExpenses = computed(() => {
@@ -44,14 +41,17 @@ const totalIncome = computed(() => {
     <!-- 单日清单 -->
     <van-cell class="card-item" v-for="bill in props.item.bills" :key="bill.id">
       <div class="item-body">
-        <span
-          ><van-tag type="primary" size="large">{{
-            bill.type_name
-          }}</van-tag></span
-        >
+        <span>
+          <van-tag
+            mark
+            :type="bill.pay_type === 1 ? 'primary' : 'warning'"
+            size="large"
+            >{{ bill.type_name }}
+          </van-tag>
+        </span>
         <span :style="{ color: 'green' }" v-if="bill.pay_type === 1"
-          >- {{ bill.amount }}</span
-        >
+          >- {{ bill.amount }}
+        </span>
         <span :style="{ color: 'red' }" v-else>+ {{ bill.amount }}</span>
       </div>
       <div class="item-footer">

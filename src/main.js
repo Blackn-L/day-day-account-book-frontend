@@ -21,6 +21,7 @@ import {
   Tag,
   List,
   PullRefresh,
+  NumberKeyboard,
 } from "vant";
 import router from "./router";
 
@@ -44,6 +45,7 @@ app
   .use(CellGroup)
   .use(Tag)
   .use(List)
-  .use(PullRefresh);
+  .use(PullRefresh)
+  .use(NumberKeyboard);
 app.use(router);
 app.mount("#app");

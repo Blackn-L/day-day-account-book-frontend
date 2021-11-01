@@ -5,7 +5,60 @@ import BillItem from "./components/BillItem.vue";
 import AddBill from "./components/AddBill.vue";
 import { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
-
+import type { DatetimePickerColumnType } from "./index";
+let types = reactive<BillType[]>([]);
+types = [
+  {
+    id: 1,
+    name: "餐饮",
+    type: 1,
+  },
+  {
+    id: 2,
+    name: "交通",
+    type: 1,
+  },
+  {
+    id: 3,
+    name: "娱乐",
+    type: 1,
+  },
+  {
+    id: 4,
+    name: "购物",
+    type: 1,
+  },
+  {
+    id: 5,
+    name: "其他",
+    type: 1,
+  },
+  {
+    id: 6,
+    name: "工资",
+    type: 2,
+  },
+  {
+    id: 7,
+    name: "奖金",
+    type: 2,
+  },
+  {
+    id: 8,
+    name: "转账",
+    type: 2,
+  },
+  {
+    id: 9,
+    name: "理财",
+    type: 2,
+  },
+  {
+    id: 10,
+    name: "其他",
+    type: 2,
+  },
+];
 const totalExpenses = ref(63444); // 总支出
 const totalIncome = ref(1411); // 总收入
 const showType = ref(false); // 选择账单类型弹窗
@@ -175,32 +228,32 @@ const onLoad = () => {};
 
 <template>
   <!-- 主体 -->
-  <van-pull-refresh v-model="listRefreshing" @refresh="onRefresh">
-    <div class="bill-header">
-      <div class="total">
-        <div>
-          <span>总支出：</span>
-          <span class="total-count">{{ `￥${totalExpenses}` }}</span>
-        </div>
-        <div style="margin-left: 15px">
-          <span>总收入：</span>
-          <span class="total-count">{{ `￥${totalIncome}` }}</span>
-        </div>
+
+  <div class="bill-header">
+    <div class="total">
+      <div>
+        <span>总支出：</span>
+        <span class="total-count">{{ `￥${totalExpenses}` }}</span>
       </div>
-      <div class="select-type-date">
-        <div>
-          <span @click="showType = true"
-            >{{ selectedType.name }} <van-icon name="arrow-down"
-          /></span>
-        </div>
-        <div style="margin-left: 10px">
-          <span @click="showDate = true"
-            >{{ shouSelectedDate }} <van-icon name="arrow-down"
-          /></span>
-        </div>
+      <div style="margin-left: 15px">
+        <span>总收入：</span>
+        <span class="total-count">{{ `￥${totalIncome}` }}</span>
       </div>
     </div>
-
+    <div class="select-type-date">
+      <div>
+        <span @click="showType = true"
+          >{{ selectedType.name }} <van-icon name="arrow-down"
+        /></span>
+      </div>
+      <div style="margin-left: 10px">
+        <span @click="showDate = true"
+          >{{ shouSelectedDate }} <van-icon name="arrow-down"
+        /></span>
+      </div>
+    </div>
+  </div>
+  <van-pull-refresh v-model="listRefreshing" @refresh="onRefresh">
     <div class="bill-list">
       <van-list
         v-model:loading="listLoading"
@@ -211,23 +264,22 @@ const onLoad = () => {};
         <BillItem v-for="item in billList" :item="item" :key="item.date" />
       </van-list>
     </div>
-
-    <!-- 添加账单按钮 -->
-    <div class="add-button">
-      <van-button round plain size="large" @click="showAddPop = true">
-        <van-icon name="records" size="32" color="#007fff" />
-      </van-button>
-    </div>
   </van-pull-refresh>
+  <!-- 添加账单按钮 -->
+  <div class="add-button">
+    <van-button round plain size="large" @click="showAddPop = true">
+      <van-icon name="records" size="32" color="#007fff" />
+    </van-button>
+  </div>
 
   <!-- 添加账单弹窗 -->
   <van-popup v-model:show="showAddPop" position="bottom"
-    ><AddBill @handle-change-type="handleChangeType"
+    ><AddBill @handle-change-type="handleChangeType" :types="types" @close="showAddPop = false" />
   /></van-popup>
 
   <!-- 账单类型弹窗 -->
   <van-popup v-model:show="showType" position="bottom"
-    ><BillTypes @handle-change-type="handleChangeType"
+    ><BillTypes @handle-change-type="handleChangeType" :types="types"
   /></van-popup>
 
   <!-- 账单时间弹窗 -->

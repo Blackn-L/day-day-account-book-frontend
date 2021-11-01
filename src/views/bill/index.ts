@@ -1,21 +1,29 @@
+/**  账单类型 */
 export interface BillType {
-  id: number; // type 的 id, 0 代表全部
+  /**  type 的 id, 0 代表全部 */
+  id: number;
   name: string;
-  type?: 1 | 2; // type 的类型, 1 位支出，2 为收入
+  /**  type 的类型, 1 位支出，2 为收入 */
+  type?: 1 | 2;
 }
-
-// 单日账单单条记录
+/**  单日账单单条记录 */
 export interface BillItem {
   id?: number;
   pay_type?: 1 | 2;
-  amount?: string; // 消费金额
-  date?: string; // 消费时间，时间戳
-  type_id?: number; // 消费类型
-  type_name?: string; // 消费名称
-  remark?: string; // 备注
+  /** 消费金额 */
+  amount?: string;
+  /** 消费时间，时间戳 */
+  date?: string;
+  /** 消费类型 */
+  type_id?: number;
+  /** 消费类型名称 */
+  type_name?: string;
+  remark?: string;
 }
-// 单日账单
+/**  单日账单全部记录 */
 export interface Bill {
   date: string;
   bills: BillItem[];
 }
+// vant 的时间组件的一个类型，官方没导出来，这边定义下
+export type DatetimePickerColumnType = "year" | "month" | "day" | "hour" | "minute";
