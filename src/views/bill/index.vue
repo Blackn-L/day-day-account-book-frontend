@@ -273,17 +273,17 @@ const onLoad = () => {};
   </div>
 
   <!-- 添加账单弹窗 -->
-  <van-popup v-model:show="showAddPop" position="bottom"
+  <van-popup v-model:show="showAddPop" position="bottom" round
     ><AddBill @handle-change-type="handleChangeType" :types="types" @close="showAddPop = false" />
   /></van-popup>
 
   <!-- 账单类型弹窗 -->
-  <van-popup v-model:show="showType" position="bottom"
+  <van-popup v-model:show="showType" position="bottom" round
     ><BillTypes @handle-change-type="handleChangeType" :types="types"
   /></van-popup>
 
-  <!-- 账单时间弹窗 -->
-  <van-popup v-model:show="showDate" position="bottom"
+  <!-- 账单时间弹窗 --> 
+  <van-popup v-model:show="showDate" position="bottom" round
     ><van-datetime-picker
       style="margin: 10px"
       v-model="selectedDate"

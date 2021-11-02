@@ -115,10 +115,13 @@ const closeKeyboard = () => {
     <div class="add-reamark">
       <van-field
         v-model="remark"
-        rows="2"
+        rows="1"
         autosize
         label="备注"
         type="textarea"
+        maxlength="50"
+        show-word-limit
+        label-width="3.1em"
         border
         colon
       />
@@ -151,10 +154,10 @@ const closeKeyboard = () => {
 
 <style lang="less" scoped>
 .add-wrapper {
-  min-height: 80vh;
   font-size: 12px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  padding-bottom: 214px;
 
   .add-header {
     padding: 12px 24px;
@@ -221,7 +224,7 @@ const closeKeyboard = () => {
 
   .add-reamark {
     padding: 0 4px;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
   }
 }
 </style>
