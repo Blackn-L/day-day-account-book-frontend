@@ -18,23 +18,27 @@ const service = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-service.interceptors.response.use((res: AxiosResponse) => {
-  const data = res.data as ResponseData;
+// 两层泛型，一层是 axios 提供的，AxiosRequestConfig
+// 一层是自定义的，ResponseData<T>
+// 实现响应的 data 以及 data.data 的类型提示
+// request 函数传入一个 data.data 的类型
+const request = async <T = any>(
+  config: AxiosRequestConfig
+): Promise<ResponseData<T>> => {
+  const { data } = await service.request<ResponseData<T>>(config);
   // 请求失败
-  if (typeof res.data !== "object") {
+  if (typeof data !== "object") {
     Toast.fail("服务端异常！");
-    return Promise.reject(res);
+    return Promise.reject(data);
   }
   if (data.code != 200) {
     if (data.message) Toast.fail(data.message);
     if (data.code == 401) {
       window.location.href = "/login";
     }
-    return Promise.reject(res.data);
+    return Promise.reject(data);
   }
+  return data;
+};
 
-  return res;
-});
-
-export default service;
+export default request;

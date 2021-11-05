@@ -1,2 +1,2 @@
-import service from "./axios";
-export const request = service
+import request from "./axios";
+export { request };
