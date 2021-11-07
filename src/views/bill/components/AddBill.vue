@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect, defineEmits } from "vue";
+import { ref, computed, watch, defineEmits, reactive } from "vue";
 import { Toast } from "vant";
 import * as dayjs from "dayjs";
 import type { DatetimePickerColumnType, BillType } from "../index";
 import { addBill } from "@/api/bill";
+
 const { types } = defineProps<{
   types: BillType[];
 }>();
@@ -33,11 +34,21 @@ const showDate = ref(false);
 const minDate = ref(new Date(2020, 0, 1)); // 可选账单最小日期
 const maxDate = ref(new Date()); // 可选账单最大日期，为当前日期
 const billAmount = ref<string>(""); // 账单金额
-const billType = ref<number | null>(null); // 账单类型
+const billType = reactive<BillType>({
+  id: 0,
+  name: "",
+}); // 账单类型
 const remark = ref("");
-watchEffect(() => {
-  billType.value = showTypes.value[0].id;
-});
+// 支出/收入切换时，账单类型默认选第一个
+watch(
+  () => showTypes,
+  () => {
+    console.log("showTypes: ", showTypes.value);
+    billType.id = showTypes.value[0].id;
+    billType.name = showTypes.value[0].name;
+  },
+  { deep: true, immediate: true }
+);
 // 选择支出还是收入
 const choosePayType = (type: string) => {
   payType.value = type;
@@ -58,7 +69,7 @@ const handelChangeDate = (date: Date) => {
 };
 
 const chooseBillType = (typeId: number) => {
-  billType.value = typeId;
+  billType.id = typeId;
 };
 const closeKeyboard = () => {
   if (billAmount.value.length === 0) {
@@ -70,7 +81,8 @@ const closeKeyboard = () => {
 const reqAddBill = async () => {
   const { code, message } = await addBill({
     amount: Number(billAmount.value),
-    type_id: Number(billType.value),
+    type_id: Number(billType.id),
+    type_name: billType.name,
     date: Number(selectedDate.value),
     pay_type: payType.value === "expense" ? 1 : 2,
     remark: remark.value,
@@ -115,7 +127,7 @@ const reqAddBill = async () => {
     <div class="add-types">
       <div v-for="type in showTypes" :key="type.id" class="type">
         <van-tag
-          :plain="type.id !== billType"
+          :plain="type.id !== billType.id"
           :type="type.type === 1 ? 'primary' : 'warning'"
           size="large"
           @click="chooseBillType(type.id)"
