@@ -34,7 +34,7 @@ const request = async <T = any>(
   if (data.code != 200) {
     if (data.message) Toast.fail(data.message);
     if (data.code == 401) {
-      location.href = "/login";
+      location.href = "#/login";
     }
     return Promise.reject(data);
   }
