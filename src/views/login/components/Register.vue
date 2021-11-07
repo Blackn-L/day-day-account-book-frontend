@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { register } from "@/api/login";
+import { ref, defineEmits } from "vue";
+import { register, LoginAndRegParams } from "@/api/user";
+import { Toast } from "vant";
+
+const emit = defineEmits<{
+  (e: "toLogin"): void;
+}>();
 const username = ref<string>("");
 const password = ref<string>("");
-const onSubmit = (values: Object) => {
-  // register(values).then;
-  console.log("submit", values);
+const onSubmit = async (values: LoginAndRegParams) => {
+  if (!values?.username?.trim() || !values?.password?.trim()) {
+    Toast.fail("请输入用户名或密码");
+    return;
+  }
+  try {
+    const { message } = await register(values);
+    Toast.success(message);
+    emit("toLogin");
+  } catch (error) {
+    console.log("error: ", error);
+  }
 };
 </script>
 
@@ -14,7 +28,7 @@ const onSubmit = (values: Object) => {
     <van-cell-group inset>
       <van-field
         v-model="username"
-        name="用户名"
+        name="username"
         label="用户名"
         placeholder="用户名"
         clearable
@@ -23,7 +37,7 @@ const onSubmit = (values: Object) => {
       <van-field
         v-model="password"
         type="password"
-        name="密码"
+        name="password"
         label="密码"
         placeholder="密码"
         clearable

@@ -22,6 +22,7 @@ import {
   List,
   PullRefresh,
   NumberKeyboard,
+  Toast,
 } from "vant";
 import router from "./router";
 
@@ -46,6 +47,7 @@ app
   .use(Tag)
   .use(List)
   .use(PullRefresh)
-  .use(NumberKeyboard);
+  .use(NumberKeyboard)
+  .use(Toast);
 app.use(router);
 app.mount("#app");

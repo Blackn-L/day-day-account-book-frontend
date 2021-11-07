@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { login } from "@/api/login";
-interface LoginData {
-  token: string;
-}
+import { useRouter } from "vue-router";
+import { Toast } from "vant";
+import { login, LoginAndRegParams } from "@/api/user";
+const router = useRouter();
 const username = ref<string>("");
 const password = ref<string>("");
-const onSubmit = async (values: Object) => {
-  console.log("submit", values);
+const onSubmit = async (values: LoginAndRegParams) => {
+  if (!values?.username?.trim() || !values?.password?.trim()) {
+    Toast.fail("请输入用户名或密码");
+    return;
+  }
   try {
-    let {data} = await login({
-      username: username.value,
-      password: password.value,
-    });
-    // if (data.token) {
-    //   window.localStorage.setItem("token", data.token);
-    // }
-    console.log("data: ", data);
+    let { data } = await login(values);
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      router.push("/");
+    }
   } catch (error) {
     console.log("error: ", error);
   }
@@ -28,7 +28,7 @@ const onSubmit = async (values: Object) => {
     <van-cell-group inset>
       <van-field
         v-model="username"
-        name="用户名"
+        name="username"
         label="用户名"
         clearable
         :rules="[{ required: true, message: '请填写用户名' }]"
@@ -36,7 +36,7 @@ const onSubmit = async (values: Object) => {
       <van-field
         v-model="password"
         type="password"
-        name="密码"
+        name="password"
         label="密码"
         clearable
         :rules="[{ required: true, message: '请填写密码' }]"

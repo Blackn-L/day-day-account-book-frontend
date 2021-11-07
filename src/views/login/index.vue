@@ -9,9 +9,11 @@ const activeTab = ref<string>("login");
 <template>
   <div class="wrapper">
     <van-cell-group inset class="main">
-      <van-tabs v-model="activeTab">
+      <van-tabs v-model:active="activeTab">
         <van-tab title="登录" name="login"><Login /></van-tab>
-        <van-tab title="注册" name="register"><Register /></van-tab>
+        <van-tab title="注册" name="register"
+          ><Register @toLogin="activeTab='login'"
+        /></van-tab>
       </van-tabs>
     </van-cell-group>
   </div>
