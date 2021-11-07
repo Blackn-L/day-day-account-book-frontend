@@ -3,6 +3,7 @@ import { ref, computed, watchEffect, defineEmits } from "vue";
 import { Toast } from "vant";
 import * as dayjs from "dayjs";
 import type { DatetimePickerColumnType, BillType } from "../index";
+import { addBill } from "@/api/bill";
 const { types } = defineProps<{
   types: BillType[];
 }>();
@@ -21,7 +22,7 @@ const showTypes = computed(() => {
   );
 });
 // 选中的时间格式化
-const shouSelectedDate = computed(() => {
+const showSelectedDate = computed(() => {
   return dayjs(selectedDate.value).format("MM-DD");
 });
 const selectedDate = ref(new Date());
@@ -33,7 +34,6 @@ const minDate = ref(new Date(2020, 0, 1)); // 可选账单最小日期
 const maxDate = ref(new Date()); // 可选账单最大日期，为当前日期
 const billAmount = ref<string>(""); // 账单金额
 const billType = ref<number | null>(null); // 账单类型
-const showRemark = ref(false); // 显示备注
 const remark = ref("");
 watchEffect(() => {
   billType.value = showTypes.value[0].id;
@@ -65,7 +65,20 @@ const closeKeyboard = () => {
     Toast("请输入金额！");
     return;
   }
-  emit("close");
+  reqAddBill();
+};
+const reqAddBill = async () => {
+  const { code, message } = await addBill({
+    amount: Number(billAmount.value),
+    type_id: Number(billType.value),
+    date: Number(selectedDate.value),
+    pay_type: payType.value === "expense" ? 1 : 2,
+    remark: remark.value,
+  });
+  if (code === 200) {
+    Toast(message);
+    emit("close");
+  }
 };
 </script>
 
@@ -91,7 +104,7 @@ const closeKeyboard = () => {
 
       <div class="date">
         <span @click="showDate = true"
-          >{{ shouSelectedDate }} <van-icon name="arrow-down"
+          >{{ showSelectedDate }} <van-icon name="arrow-down"
         /></span>
       </div>
     </div>
