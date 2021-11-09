@@ -8,11 +8,26 @@ interface AddBillRequest {
   remark?: string;
 }
 
+interface GetBillListRequest {
+  date: number;
+  page: number;
+  page_size?: number;
+  type_id?: number;
+}
+
 // 添加账单
 export function addBill(params: AddBillRequest) {
   return request({
     url: "/bill/add",
     method: "post",
     data: params,
+  });
+}
+
+// 获取账单列表
+export function getBillList(params: GetBillListRequest) {
+  return request({
+    url: `/bill/list?date=${params.date}&page=${params.page}&page_size=${params.page_size}&type_id=${params.type_id}`,
+    method: "get",
   });
 }
