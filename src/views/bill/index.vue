@@ -134,7 +134,7 @@ const reqGetBillList = async () => {
     type_id: selectedType.id,
   };
   try {
-    const { code, data } = await getBillList(params);
+    const { code, data} = await getBillList(params);
     if (code === 200) {
       billList.value = billList.value.concat(data.list);
       totalExpenses.value = data?.totalExpense || 0;

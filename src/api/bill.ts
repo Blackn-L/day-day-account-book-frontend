@@ -1,4 +1,5 @@
 import { request } from "@/utils/index";
+import type { Bill } from "@/views/bill/index";
 interface AddBillRequest {
   amount: number; // 金额
   type_id: number; // 账单类型 ID
@@ -15,6 +16,13 @@ interface GetBillListRequest {
   type_id?: number;
 }
 
+interface GetBillListResponse {
+  totalExpense: number; // 总支出
+  totalIncome: number; // 总收入
+  totalPage: number; // 总页数
+  list: Bill[];
+}
+
 // 添加账单
 export function addBill(params: AddBillRequest) {
   return request({
@@ -26,7 +34,7 @@ export function addBill(params: AddBillRequest) {
 
 // 获取账单列表
 export function getBillList(params: GetBillListRequest) {
-  return request({
+  return request<GetBillListResponse>({
     url: `/bill/list?date=${params.date}&page=${params.page}&page_size=${params.page_size}&type_id=${params.type_id}`,
     method: "get",
   });
