@@ -1,7 +1,9 @@
 # 呆呆记账本
 > 自己写的移动端记账本，Vue3 + Typescript + Vite + Vant3，可以作为该类技术栈项目搭建的参考
 > 页面基本 UI 和逻辑基于 Nick 大佬的 React 版[https://github.com/Nick930826/juejue-vite-h5]，在此基础上加了些自己的想法
-
+## 版本
+TSX 版本
+SFC 版本
 ## 在线体验
 待部署
 ## 插件

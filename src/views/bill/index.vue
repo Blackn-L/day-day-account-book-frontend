@@ -6,6 +6,7 @@ import AddBill from "./components/AddBill.vue";
 import { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
 import type { DatetimePickerColumnType } from "./index";
+import { getBillList } from "@/api/bill";
 let types = reactive<BillType[]>([]);
 types = [
   {
@@ -59,8 +60,9 @@ types = [
     type: 2,
   },
 ];
-const totalExpenses = ref(63444); // 总支出
-const totalIncome = ref(1411); // 总收入
+const totalExpenses = ref(0); // 总支出
+const totalIncome = ref(0); // 总收入
+const totalPage = ref(0); // 总页数
 const showType = ref(false); // 选择账单类型弹窗
 const showDate = ref(false); // 选择账单日期弹窗
 const showAddPop = ref(false); // 添加账单弹窗
@@ -69,7 +71,7 @@ const selectedType = reactive<BillType>({
   id: 0,
   name: "全部类型",
 });
-const listLoading = ref(true); // 账单列表加载状态
+const listLoading = ref(false); // 账单列表加载状态
 const listFinished = ref(false); // 账单列表是否已加载完毕
 const listRefreshing = ref(false); // 账单列表是否正在刷新
 // 最早为 2020 年 1 月 1 日
@@ -77,126 +79,11 @@ const minDate = ref(new Date(2020, 0, 1));
 // 最迟为当前时间
 const maxDate = ref(new Date());
 const selectedDate = ref(new Date());
-const billList = reactive<Bill[]>([
-  {
-    date: "2021-10-18",
-    bills: [
-      {
-        id: 2606,
-        pay_type: 2,
-        amount: "400.00",
-        date: "1634522059000",
-        type_id: 11,
-        type_name: "工资",
-        remark: "",
-      },
-      {
-        id: 2609,
-        pay_type: 1,
-        amount: "88.00",
-        date: "1634550899000",
-        type_id: 6,
-        type_name: "学习",
-        remark: "",
-      },
-      {
-        id: 2610,
-        pay_type: 1,
-        amount: "25.00",
-        date: "1634569499000",
-        type_id: 1,
-        type_name: "餐饮",
-        remark: "",
-      },
-    ],
-  },
-  {
-    date: "2021-10-17",
-    bills: [
-      {
-        id: 2603,
-        pay_type: 1,
-        amount: "22.00",
-        date: "1634449416000",
-        type_id: 2,
-        type_name: "服饰",
-        remark: "",
-      },
-      {
-        id: 2604,
-        pay_type: 1,
-        amount: "25.00",
-        date: "1634449424000",
-        type_id: 6,
-        type_name: "学习",
-        remark: "",
-      },
-    ],
-  },
-  {
-    date: "2021-10-14",
-    bills: [
-      {
-        id: 2592,
-        pay_type: 1,
-        amount: "222.00",
-        date: "1634193029000",
-        type_id: 5,
-        type_name: "购物",
-        remark: "掘金小册",
-      },
-      {
-        id: 2593,
-        pay_type: 1,
-        amount: "30.00",
-        date: "1634200474000",
-        type_id: 9,
-        type_name: "人情",
-        remark: "小册",
-      },
-    ],
-  },
-  {
-    date: "2021-10-12",
-    bills: [
-      {
-        id: 2583,
-        pay_type: 2,
-        amount: "12.00",
-        date: "1634022697000",
-        type_id: 16,
-        type_name: "其他",
-        remark: "",
-      },
-    ],
-  },
-  {
-    date: "2021-10-11",
-    bills: [
-      {
-        id: 2563,
-        pay_type: 1,
-        amount: "5.00",
-        date: "1633907515000",
-        type_id: 6,
-        type_name: "学习",
-        remark: "",
-      },
-      {
-        id: 2564,
-        pay_type: 1,
-        amount: "8.00",
-        date: "1633907522000",
-        type_id: 6,
-        type_name: "学习",
-        remark: "",
-      },
-    ],
-  },
-]);
+let billList = ref<Bill[]>([]);
+const currentPage = ref(1);
 // 计算属性
 // 选中的时间格式化
-const shouSelectedDate = computed(() => {
+const showSelectedDate = computed(() => {
   return dayjs(selectedDate.value).format("YYYY-MM");
 });
 
@@ -204,11 +91,15 @@ const shouSelectedDate = computed(() => {
 const handleChangeType = (typeObj: BillType) => {
   showType.value = false;
   Object.assign(selectedType, typeObj);
+  initParam();
+  reqGetBillList();
 };
 // 账单时间改变
 const handelChangeDate = (date: Date) => {
   showDate.value = false;
   selectedDate.value = date;
+  initParam();
+  reqGetBillList();
 };
 const formatter = (type: DatetimePickerColumnType, val: number) => {
   if (type === "year") {
@@ -219,16 +110,63 @@ const formatter = (type: DatetimePickerColumnType, val: number) => {
   }
   return val;
 };
-// 下拉刷新
-const onRefresh = () => {};
+// 重置数据
+const initParam = () => {
+  listLoading.value = true;
+  listFinished.value = false;
+  billList.value = [];
+  totalPage.value = 0;
+  currentPage.value = 1;
+};
 
-//
-const onLoad = () => {};
+// 添加账单成功回调
+const handleBillAdded = () => {
+  initParam();
+  reqGetBillList();
+};
+// 获取账单列表
+const reqGetBillList = async () => {
+  // 如果是下拉刷新，则重置列表
+  const params = {
+    date: Number(selectedDate.value),
+    page: currentPage.value,
+    page_size: 5,
+    type_id: selectedType.id,
+  };
+  try {
+    const { code, data } = await getBillList(params);
+    if (code === 200) {
+      billList.value = billList.value.concat(data.list);
+      totalExpenses.value = data?.totalExpense || 0;
+      totalIncome.value = data?.totalIncome || 0;
+      totalPage.value = data?.totalPage || 0;
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (currentPage.value < totalPage.value) {
+      currentPage.value += 1;
+    } else {
+      listFinished.value = true;
+    }
+    listLoading.value = false;
+  }
+};
+// 下拉刷新
+const onRefresh = async () => {
+  initParam();
+  await reqGetBillList();
+  listRefreshing.value = false;
+};
+
+// 列表 load 事件
+const onLoad = async () => {
+  await reqGetBillList();
+};
 </script>
 
 <template>
   <!-- 主体 -->
-
   <div class="bill-header">
     <div class="total">
       <div>
@@ -248,7 +186,7 @@ const onLoad = () => {};
       </div>
       <div style="margin-left: 10px">
         <span @click="showDate = true"
-          >{{ shouSelectedDate }} <van-icon name="arrow-down"
+          >{{ showSelectedDate }} <van-icon name="arrow-down"
         /></span>
       </div>
     </div>
@@ -274,15 +212,20 @@ const onLoad = () => {};
 
   <!-- 添加账单弹窗 -->
   <van-popup v-model:show="showAddPop" position="bottom" round
-    ><AddBill @handle-change-type="handleChangeType" :types="types" @close="showAddPop = false" />
-  /></van-popup>
+    ><AddBill
+      @on-bill-added="handleBillAdded"
+      :types="types"
+      @close="showAddPop = false"
+    />
+    /></van-popup
+  >
 
   <!-- 账单类型弹窗 -->
   <van-popup v-model:show="showType" position="bottom" round
     ><BillTypes @handle-change-type="handleChangeType" :types="types"
   /></van-popup>
 
-  <!-- 账单时间弹窗 --> 
+  <!-- 账单时间弹窗 -->
   <van-popup v-model:show="showDate" position="bottom" round
     ><van-datetime-picker
       style="margin: 10px"

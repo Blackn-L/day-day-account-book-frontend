@@ -10,6 +10,7 @@ const { types } = defineProps<{
 }>();
 const emit = defineEmits<{
   (e: "close"): void;
+  (e: "onBillAdded"): void;
 }>();
 const expenseClass = computed(() => {
   return payType.value === "expense" ? "button-expense-actived" : "";
@@ -90,6 +91,7 @@ const reqAddBill = async () => {
   if (code === 200) {
     Toast(message);
     emit("close");
+    emit("onBillAdded");
   }
 };
 </script>

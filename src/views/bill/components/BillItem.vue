@@ -17,6 +17,7 @@ const totalExpenses = computed(() => {
 });
 // 当日总收入
 const totalIncome = computed(() => {
+  console.log(props.item.bills);
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 2) cur += Number(bill?.amount);
     return cur;
