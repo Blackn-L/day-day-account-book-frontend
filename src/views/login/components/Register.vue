@@ -14,9 +14,13 @@ const onSubmit = async (values: LoginAndRegParams) => {
     return;
   }
   try {
-    const { message } = await register(values);
-    Toast.success(message);
-    emit("toLogin");
+    const { message, code } = await register(values);
+    if (code === 200) {
+      Toast.success(message);
+      setTimeout(() => {
+        emit("toLogin");
+      }, 500);
+    }
   } catch (error) {
     console.log("error: ", error);
   }

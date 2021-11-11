@@ -12,10 +12,13 @@ const onSubmit = async (values: LoginAndRegParams) => {
     return;
   }
   try {
-    let { data } = await login(values);
+    let { data, message } = await login(values);
     if (data.token) {
       localStorage.setItem("token", data.token);
-      router.push("/");
+      Toast.success(message);
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
     }
   } catch (error) {
     console.log("error: ", error);
