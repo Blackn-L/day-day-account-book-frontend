@@ -44,7 +44,6 @@ const remark = ref("");
 watch(
   () => showTypes,
   () => {
-    console.log("showTypes: ", showTypes.value);
     billType.id = showTypes.value[0].id;
     billType.name = showTypes.value[0].name;
   },
@@ -69,8 +68,9 @@ const handelChangeDate = (date: Date) => {
   selectedDate.value = date;
 };
 
-const chooseBillType = (typeId: number) => {
-  billType.id = typeId;
+const chooseBillType = (type: BillType) => {
+  billType.id = type.id;
+  billType.name = type.name;
 };
 const closeKeyboard = () => {
   if (billAmount.value.length === 0) {
@@ -132,7 +132,7 @@ const reqAddBill = async () => {
           :plain="type.id !== billType.id"
           :type="type.type === 1 ? 'primary' : 'warning'"
           size="large"
-          @click="chooseBillType(type.id)"
+          @click="chooseBillType(type)"
         >
           {{ type.name }}
         </van-tag>
