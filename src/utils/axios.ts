@@ -14,7 +14,6 @@ const service = axios.create({
   baseURL: MODE === "development" ? "/api" : "http://api.svip52.com/pocket/",
   headers: {
     "X-Requested-With": "XMLHttpRequest",
-    Authorization: localStorage.getItem("token") || "",
     "Content-Type": "application/json",
   },
 });
@@ -25,6 +24,13 @@ const service = axios.create({
 const request = async <T = any>(
   config: AxiosRequestConfig
 ): Promise<ResponseData<T>> => {
+  // 请求前加上 token
+  service.interceptors.request.use((config) => {
+    if (config?.headers) {
+      config.headers.Authorization = localStorage.getItem("token") || "";
+    }
+    return config;
+  });
   const { data } = await service.request<ResponseData<T>>(config);
   // 请求失败
   if (typeof data !== "object") {
