@@ -50,7 +50,6 @@ watchEffect(() => {
   th,
   td {
     margin: 0;
-    padding: 0;
   }
   body {
     background: #fff;
