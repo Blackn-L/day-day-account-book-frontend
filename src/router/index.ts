@@ -21,6 +21,7 @@ const routes = [
   },
   {
     path: "/detail",
+    name: "detail",
     component: () => import("@/views/bill/components/BillDetail.vue"),
     meta: { checkAuth: true },
   },

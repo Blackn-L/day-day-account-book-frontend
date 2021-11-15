@@ -39,3 +39,11 @@ export function getBillList(params: GetBillListRequest) {
     method: "get",
   });
 }
+
+// 获取账单详情
+export function getBillDetail(id: number) {
+  return request<AddBillRequest>({
+    url: `/bill/detail?id=${id}`,
+    method: "get",
+  });
+}

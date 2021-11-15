@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import type { Bill, BillItem } from "../index";
 import * as dayjs from "dayjs";
 
@@ -23,6 +24,15 @@ const totalIncome = computed(() => {
     return cur;
   }, 0);
 });
+
+const router = useRouter();
+// 查看详情
+const clickDetail = async (id: number | undefined) => {
+  router.push({
+    name: "detail",
+    query: { id },
+  });
+};
 </script>
 
 <template>
@@ -40,7 +50,7 @@ const totalIncome = computed(() => {
     </div>
 
     <!-- 单日清单 -->
-    <van-cell class="card-item" v-for="bill in props.item.bills" :key="bill.id">
+    <van-cell class="card-item" v-for="bill in props.item.bills" :key="bill.id"  @click="clickDetail(bill.id)">
       <div class="item-body">
         <span>
           <van-tag
