@@ -1,12 +1,70 @@
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, reactive, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { Toast } from "vant";
 import Header from "@/components/Header.vue";
-import { getBillDetail } from "@/api/bill";
+import AddBill from "./AddBill.vue";
+import { getBillDetail, deleteBill } from "@/api/bill";
 import type { BillItem } from "../index";
 import * as dayjs from "dayjs";
+import { BillType } from "../index";
+let types = reactive<BillType[]>([]);
+types = [
+  {
+    id: 1,
+    name: "餐饮",
+    type: 1,
+  },
+  {
+    id: 2,
+    name: "交通",
+    type: 1,
+  },
+  {
+    id: 3,
+    name: "娱乐",
+    type: 1,
+  },
+  {
+    id: 4,
+    name: "购物",
+    type: 1,
+  },
+  {
+    id: 5,
+    name: "其他",
+    type: 1,
+  },
+  {
+    id: 6,
+    name: "工资",
+    type: 2,
+  },
+  {
+    id: 7,
+    name: "奖金",
+    type: 2,
+  },
+  {
+    id: 8,
+    name: "转账",
+    type: 2,
+  },
+  {
+    id: 9,
+    name: "理财",
+    type: 2,
+  },
+  {
+    id: 10,
+    name: "其他",
+    type: 2,
+  },
+];
 const route = useRoute();
+const router = useRouter();
 const detail = reactive<BillItem>({});
+const showAddPop = ref(false);
 const id = Number(route.query.id);
 onMounted(() => {
   reqGetBillDetail(id);
@@ -16,20 +74,31 @@ onMounted(() => {
 const reqGetBillDetail = async (id: number) => {
   const { data, code } = await getBillDetail(id);
   if (code === 200) {
-    console.log("data: ", data);
-    Object.assign(detail, data);
+    Object.assign(detail, data[0]);
     console.log("detail: ", detail);
   }
 };
 const clickDelete = async () => {
   console.log("clickDelete");
+  const { code, message } = await deleteBill(id);
+  if (code === 200) {
+    Toast(message);
+    setTimeout(() => {
+      router.push("/");
+    }, 500);
+  }
 };
-const edit = async () => {};
+const edit = async () => {
+  showAddPop.value = true;
+};
+const handleBillUpdated = () => {
+  reqGetBillDetail(id);
+};
 </script>
 
 <template>
   <Header />
-  <div class="detail">
+  <div class="detail" v-if="Object.keys(detail).length">
     <div>
       <van-tag
         :type="detail.pay_type === 1 ? 'primary' : 'warning'"
@@ -67,6 +136,19 @@ const edit = async () => {};
       />
     </div>
   </div>
+  <div v-else>
+    <van-empty image="error" description="暂无该账单数据" />
+  </div>
+  <!-- 添加账单弹窗 -->
+  <van-popup v-model:show="showAddPop" position="bottom" round
+    ><AddBill
+      :types="types"
+      :initData="detail"
+      @close="showAddPop = false"
+      @on-bill-updated="handleBillUpdated"
+    />
+    /></van-popup
+  >
 </template>
 
 <style lang="less" scoped>

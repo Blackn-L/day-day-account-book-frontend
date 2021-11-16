@@ -2,15 +2,17 @@
 import { ref, computed, watch, defineEmits, reactive } from "vue";
 import { Toast } from "vant";
 import * as dayjs from "dayjs";
-import type { DatetimePickerColumnType, BillType } from "../index";
-import { addBill } from "@/api/bill";
+import type { DatetimePickerColumnType, BillType, BillItem } from "../index";
+import { addBill, updateBill } from "@/api/bill";
 
-const { types } = defineProps<{
+const { types, initData } = defineProps<{
   types: BillType[];
+  initData: BillItem;
 }>();
 const emit = defineEmits<{
   (e: "close"): void;
   (e: "onBillAdded"): void;
+  (e: "onBillUpdated"): void;
 }>();
 const expenseClass = computed(() => {
   return payType.value === "expense" ? "button-expense-actived" : "";
@@ -27,7 +29,7 @@ const showTypes = computed(() => {
 const showSelectedDate = computed(() => {
   return dayjs(selectedDate.value).format("MM-DD");
 });
-const selectedDate = ref(new Date());
+const selectedDate = ref<Date>(new Date());
 const exposeButton = ref<HTMLElement | null>(null);
 const incomeButton = ref(null);
 const payType = ref("expense"); // 支出/收入
@@ -46,6 +48,20 @@ watch(
   () => {
     billType.id = showTypes.value[0].id;
     billType.name = showTypes.value[0].name;
+  },
+  { deep: true, immediate: true }
+);
+watch(
+  () => initData,
+  () => {
+    if (Object.keys(initData).length > 0) {
+      billAmount.value = initData.amount || "";
+      billType.id = initData.type_id || 0;
+      billType.name = initData.type_name || "";
+      selectedDate.value = new Date(Number(initData.date || ""));
+      remark.value = initData.remark || "";
+      payType.value = initData.pay_type === 1 ? "expense" : "income";
+    }
   },
   { deep: true, immediate: true }
 );
@@ -77,23 +93,37 @@ const closeKeyboard = () => {
     Toast("请输入金额！");
     return;
   }
-  reqAddBill();
+  reqAddOrUpdateBill();
 };
-const reqAddBill = async () => {
-  const { code, message } = await addBill({
-    amount: Number(billAmount.value),
+// 新增
+const reqAddOrUpdateBill = async () => {
+  const _param: BillItem = {
+    amount: billAmount.value,
     type_id: Number(billType.id),
     type_name: billType.name,
-    date: Number(selectedDate.value),
+    date: Number(selectedDate.value) + "",
     pay_type: payType.value === "expense" ? 1 : 2,
     remark: remark.value,
-  });
-  if (code === 200) {
-    Toast(message);
-    emit("close");
-    emit("onBillAdded");
+  };
+  if (initData.id) {
+    _param.id = initData.id;
+    const { code, message } = await updateBill(_param);
+    if (code === 200) {
+      Toast(message);
+      emit("close");
+      emit('onBillUpdated')
+    }
+  } else {
+    const { code, message } = await addBill(_param);
+    if (code === 200) {
+      Toast(message);
+      emit("close");
+      emit("onBillAdded");
+    }
   }
 };
+// 更新
+updateBill;
 </script>
 
 <template>

@@ -1,13 +1,5 @@
 import { request } from "@/utils/index";
-import type { Bill } from "@/views/bill/index";
-interface AddBillRequest {
-  amount: number; // 金额
-  type_id: number; // 账单类型 ID
-  type_name: string; // 账单类型名
-  date: number; // 账单日期,时间戳
-  pay_type: number; // 支出/收入
-  remark?: string;
-}
+import type { Bill, BillItem } from "@/views/bill/index";
 
 interface GetBillListRequest {
   date: number;
@@ -24,7 +16,7 @@ interface GetBillListResponse {
 }
 
 // 添加账单
-export function addBill(params: AddBillRequest) {
+export function addBill(params: BillItem) {
   return request({
     url: "/bill/add",
     method: "post",
@@ -42,8 +34,25 @@ export function getBillList(params: GetBillListRequest) {
 
 // 获取账单详情
 export function getBillDetail(id: number) {
-  return request<AddBillRequest>({
+  return request<Bill[]>({
     url: `/bill/detail?id=${id}`,
+    method: "get",
+  });
+}
+
+// 更新账单
+export function updateBill(params: BillItem) {
+  return request({
+    url: "/bill/update",
+    method: "post",
+    data: params,
+  });
+}
+
+// 删除账单
+export function deleteBill(id: number) {
+  return request({
+    url: `/bill/delete?id=${id}`,
     method: "get",
   });
 }

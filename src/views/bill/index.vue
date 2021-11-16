@@ -3,7 +3,7 @@ import { ref, reactive, computed } from "vue";
 import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
 import AddBill from "./components/AddBill.vue";
-import { BillType, Bill } from "./index";
+import type { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
 import type { DatetimePickerColumnType } from "./index";
 import { getBillList } from "@/api/bill";
@@ -134,7 +134,7 @@ const reqGetBillList = async () => {
     type_id: selectedType.id,
   };
   try {
-    const { code, data} = await getBillList(params);
+    const { code, data } = await getBillList(params);
     if (code === 200) {
       billList.value = billList.value.concat(data.list);
       totalExpenses.value = data?.totalExpense || 0;
@@ -215,6 +215,7 @@ const onLoad = async () => {
     ><AddBill
       @on-bill-added="handleBillAdded"
       :types="types"
+      :initData="{}"
       @close="showAddPop = false"
     />
     /></van-popup
