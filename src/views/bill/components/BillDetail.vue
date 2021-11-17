@@ -75,7 +75,6 @@ const reqGetBillDetail = async (id: number) => {
   const { data, code } = await getBillDetail(id);
   if (code === 200) {
     Object.assign(detail, data[0]);
-    console.log("detail: ", detail);
   }
 };
 const clickDelete = async () => {
@@ -92,7 +91,7 @@ const edit = async () => {
   showAddPop.value = true;
 };
 const handleBillUpdated = () => {
-  reqGetBillDetail(id);
+  router.push("/");
 };
 </script>
 
