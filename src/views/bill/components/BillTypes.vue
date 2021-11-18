@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, computed } from "vue";
 import type { BillType } from "../index";
 
 const { types } = defineProps<{
   types: BillType[];
 }>();
-const emit = defineEmits(["handle-change-type"]);
+const emit = defineEmits<{
+  (e: "handle-change-type", typeObj: BillType): void;
+}>();
 const dividerStyle = {
   fontSize: "18px",
   color: "#000000",
