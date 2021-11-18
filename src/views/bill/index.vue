@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, reactive } from "vue";
 import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
 import AddBill from "./components/AddBill.vue";
+import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import type { BillType, Bill } from "./index";
 import * as dayjs from "dayjs";
-import type { DatetimePickerColumnType } from "./index";
 import { getBillList } from "@/api/bill";
+// 利用 ref 获取子组件时，如果是 defineExpose 暴露出来的，需要主动声明其类型
+// https://github.com/vuejs/rfcs/pull/210#issuecomment-727067392
 let types = reactive<BillType[]>([]);
 types = [
   {
@@ -60,6 +62,7 @@ types = [
     type: 2,
   },
 ];
+const refPopDate = ref<PopDateAPI | undefined>();
 const totalExpenses = ref(0); // 总支出
 const totalIncome = ref(0); // 总收入
 const totalPage = ref(0); // 总页数
@@ -74,18 +77,10 @@ const selectedType = reactive<BillType>({
 const listLoading = ref(false); // 账单列表加载状态
 const listFinished = ref(false); // 账单列表是否已加载完毕
 const listRefreshing = ref(false); // 账单列表是否正在刷新
-// 最早为 2020 年 1 月 1 日
-const minDate = ref(new Date(2020, 0, 1));
-// 最迟为当前时间
-const maxDate = ref(new Date());
-const selectedDate = ref(new Date());
+
+const selectedDate = ref<Date>(new Date());
 let billList = ref<Bill[]>([]);
 const currentPage = ref(1);
-// 计算属性
-// 选中的时间格式化
-const showSelectedDate = computed(() => {
-  return dayjs(selectedDate.value).format("YYYY-MM");
-});
 
 // 账单类型改变
 const handleChangeType = (typeObj: BillType) => {
@@ -96,20 +91,12 @@ const handleChangeType = (typeObj: BillType) => {
 };
 // 账单时间改变
 const handelChangeDate = (date: Date) => {
-  showDate.value = false;
+  if (refPopDate.value) refPopDate.value.showDate = false;
   selectedDate.value = date;
   initParam();
   reqGetBillList();
 };
-const formatter = (type: DatetimePickerColumnType, val: number) => {
-  if (type === "year") {
-    return `${val}年`;
-  }
-  if (type === "month") {
-    return `${val}月`;
-  }
-  return val;
-};
+
 // 重置数据
 const initParam = () => {
   listLoading.value = true;
@@ -185,8 +172,14 @@ const onLoad = async () => {
         /></span>
       </div>
       <div style="margin-left: 10px">
-        <span @click="showDate = true"
-          >{{ showSelectedDate }} <van-icon name="arrow-down"
+        <span
+          @click="
+            () => {
+              if (refPopDate) refPopDate.showDate = true;
+            }
+          "
+          >{{ dayjs(selectedDate).format("YYYY-MM") }}
+          <van-icon name="arrow-down"
         /></span>
       </div>
     </div>
@@ -227,17 +220,11 @@ const onLoad = async () => {
   /></van-popup>
 
   <!-- 账单时间弹窗 -->
-  <van-popup v-model:show="showDate" position="bottom" round
-    ><van-datetime-picker
-      style="margin: 10px"
-      v-model="selectedDate"
-      type="year-month"
-      title="选择年月"
-      :min-date="minDate"
-      :max-date="maxDate"
-      :formatter="formatter"
-      @confirm="handelChangeDate"
-  /></van-popup>
+  <PopDate
+    ref="refPopDate"
+    :selected-date="selectedDate"
+    @on-change="handelChangeDate"
+  />
 </template>
 
 <style lang="less" scoped>
