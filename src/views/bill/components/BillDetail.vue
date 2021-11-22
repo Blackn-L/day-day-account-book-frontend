@@ -78,7 +78,6 @@ const reqGetBillDetail = async (id: number) => {
   }
 };
 const clickDelete = async () => {
-  console.log("clickDelete");
   const { code, message } = await deleteBill(id);
   if (code === 200) {
     Toast(message);

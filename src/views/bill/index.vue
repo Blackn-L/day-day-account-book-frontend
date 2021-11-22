@@ -191,7 +191,12 @@ const onLoad = async () => {
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <BillItem v-for="item in billList" :item="item" :key="item.date" />
+        <BillItem
+          v-for="item in billList"
+          :item="item"
+          :key="item.date"
+          @delete="handleBillAdded"
+        />
       </van-list>
     </div>
   </van-pull-refresh>

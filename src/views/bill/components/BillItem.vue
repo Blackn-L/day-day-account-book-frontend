@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { Toast } from "vant";
 import type { Bill, BillItem } from "../index";
 import * as dayjs from "dayjs";
+import { deleteBill } from "@/api/bill";
 
 //  https://v3.cn.vuejs.org/api/sfc-script-setup.html#%E4%BB%85%E9%99%90-typescript-%E7%9A%84%E5%8A%9F%E8%83%BD
 const props = defineProps<{
   item: Bill;
 }>();
-
+const emits = defineEmits<{
+  (e: "delete"): void;
+}>();
 // 当日总支出
-const total_expenses = computed(() => {
+const totalExpenses = computed(() => {
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 1) cur += Number(bill?.amount);
     return cur;
   }, 0);
 });
 // 当日总收入
-const total_income = computed(() => {
+const totalIncome = computed(() => {
   console.log(props.item.bills);
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 2) cur += Number(bill?.amount);
@@ -33,6 +37,15 @@ const clickDetail = async (id: number | undefined) => {
     query: { id },
   });
 };
+const clickDelete = async (id: number | undefined) => {
+  console.log("clickDelete");
+  if (!id) return;
+  const { code, message } = await deleteBill(id);
+  if (code === 200) {
+    Toast(message);
+    emits("delete");
+  }
+};
 </script>
 
 <template>
@@ -43,39 +56,49 @@ const clickDetail = async (id: number | undefined) => {
       <span class="card-title-date"> {{ props.item.date }} </span>
       <span class="card-title-amount">
         <span class="expense"
-          ><van-icon name="minus" />￥{{ total_expenses }}</span
+          ><van-icon name="minus" />￥{{ totalExpenses }}</span
         >
-        <span class="income"><van-icon name="plus" />￥{{ total_income }}</span>
+        <span class="income"><van-icon name="plus" />￥{{ totalIncome }}</span>
       </span>
     </div>
 
     <!-- 单日清单 -->
-    <van-cell class="card-item" v-for="bill in props.item.bills" :key="bill.id"  @click="clickDetail(bill.id)">
-      <div class="item-body">
-        <span>
-          <van-tag
-            mark
-            :type="bill.pay_type === 1 ? 'primary' : 'warning'"
-            size="large"
-            >{{ bill.type_name }}
-          </van-tag>
-        </span>
-        <span :style="{ color: 'green' }" v-if="bill.pay_type === 1"
-          >- {{ bill.amount }}
-        </span>
-        <span :style="{ color: 'red' }" v-else>+ {{ bill.amount }}</span>
-      </div>
-      <div class="item-footer">
-        <span>
-          {{ dayjs(Number(bill.date)).format("HH:mm") }}
-        </span>
-        <span v-if="bill.remark">
-          {{ " | " + bill.remark }}
-        </span>
-      </div>
-    </van-cell>
+    <van-swipe-cell v-for="bill in props.item.bills" :key="bill.id">
+      <van-cell @click="clickDetail(bill.id)" class="card-item">
+        <div class="item-body">
+          <span>
+            <van-tag
+              mark
+              :type="bill.pay_type === 1 ? 'primary' : 'warning'"
+              size="large"
+              >{{ bill.type_name }}
+            </van-tag>
+          </span>
+          <span :style="{ color: 'green' }" v-if="bill.pay_type === 1"
+            >- {{ bill.amount }}
+          </span>
+          <span :style="{ color: 'red' }" v-else>+ {{ bill.amount }}</span>
+        </div>
+        <div class="item-footer">
+          <span>
+            {{ dayjs(Number(bill.date)).format("HH:mm") }}
+          </span>
+          <span v-if="bill.remark">
+            {{ " | " + bill.remark + bill.id }}
+          </span>
+        </div>
+      </van-cell>
+      <template #right>
+        <van-button
+          square
+          type="danger"
+          text="删除"
+          style="height: 100%"
+          @click="clickDelete(bill.id)"
+        />
+      </template>
+    </van-swipe-cell>
   </van-cell-group>
-  <!-- </div> -->
 </template>
 
 <style lang="less" scoped>
