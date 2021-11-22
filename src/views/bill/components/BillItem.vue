@@ -17,7 +17,7 @@ const total_expenses = computed(() => {
   }, 0);
 });
 // 当日总收入
-const total_incode = computed(() => {
+const total_income = computed(() => {
   console.log(props.item.bills);
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 2) cur += Number(bill?.amount);
@@ -45,7 +45,7 @@ const clickDetail = async (id: number | undefined) => {
         <span class="expense"
           ><van-icon name="minus" />￥{{ total_expenses }}</span
         >
-        <span class="income"><van-icon name="plus" />￥{{ total_incode }}</span>
+        <span class="income"><van-icon name="plus" />￥{{ total_income }}</span>
       </span>
     </div>
 

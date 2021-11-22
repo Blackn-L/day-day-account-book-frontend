@@ -64,7 +64,7 @@ types = [
 ];
 const refPopDate = ref<PopDateAPI | undefined>();
 const total_expenses = ref(0); // 总支出
-const total_incode = ref(0); // 总收入
+const total_income = ref(0); // 总收入
 const total_page = ref(0); // 总页数
 const showType = ref(false); // 选择账单类型弹窗
 const showDate = ref(false); // 选择账单日期弹窗
@@ -125,7 +125,7 @@ const reqGetBillList = async () => {
     if (code === 200) {
       billList.value = billList.value.concat(data.list);
       total_expenses.value = data?.total_expense || 0;
-      total_incode.value = data?.total_incode || 0;
+      total_income.value = data?.total_income || 0;
       total_page.value = data?.total_page || 0;
     }
   } catch (error) {
@@ -162,7 +162,7 @@ const onLoad = async () => {
       </div>
       <div style="margin-left: 15px">
         <span>总收入：</span>
-        <span class="total-count">{{ `￥${total_incode}` }}</span>
+        <span class="total-count">{{ `￥${total_income}` }}</span>
       </div>
     </div>
     <div class="select-type-date">
