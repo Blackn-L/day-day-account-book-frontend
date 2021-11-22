@@ -4,7 +4,7 @@ const activeTab = ref<string>("bill");
 </script>
 
 <template>
-  <van-tabbar v-model="activeTab" route>
+  <van-tabbar class="tab" v-model="activeTab" route>
     <van-tabbar-item icon="orders-o" name="bill" to="/"> 账单</van-tabbar-item>
     <van-tabbar-item icon="bar-chart-o" name="count" to="/count"
       >统计</van-tabbar-item
@@ -15,4 +15,8 @@ const activeTab = ref<string>("bill");
   </van-tabbar>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.tab {
+  border-top: 1px solid #e9e9e9;
+}
+</style>
