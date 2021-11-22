@@ -63,11 +63,10 @@ types = [
   },
 ];
 const refPopDate = ref<PopDateAPI | undefined>();
-const total_expenses = ref(0); // 总支出
-const total_income = ref(0); // 总收入
-const total_page = ref(0); // 总页数
+const totalExpenses = ref(0); // 总支出
+const totalIncome = ref(0); // 总收入
+const totalPage = ref(0); // 总页数
 const showType = ref(false); // 选择账单类型弹窗
-const showDate = ref(false); // 选择账单日期弹窗
 const showAddPop = ref(false); // 添加账单弹窗
 // 已选账单类型
 const selectedType = reactive<BillType>({
@@ -102,7 +101,7 @@ const initParam = () => {
   listLoading.value = true;
   listFinished.value = false;
   billList.value = [];
-  total_page.value = 0;
+  totalPage.value = 0;
   currentPage.value = 1;
 };
 
@@ -124,14 +123,14 @@ const reqGetBillList = async () => {
     const { code, data } = await getBillList(params);
     if (code === 200) {
       billList.value = billList.value.concat(data.list);
-      total_expenses.value = data?.total_expense || 0;
-      total_income.value = data?.total_income || 0;
-      total_page.value = data?.total_page || 0;
+      totalExpenses.value = data?.total_expense || 0;
+      totalIncome.value = data?.total_income || 0;
+      totalPage.value = data?.total_page || 0;
     }
   } catch (error) {
     console.log(error);
   } finally {
-    if (currentPage.value < total_page.value) {
+    if (currentPage.value < totalPage.value) {
       currentPage.value += 1;
     } else {
       listFinished.value = true;
@@ -158,11 +157,11 @@ const onLoad = async () => {
     <div class="total">
       <div>
         <span>总支出：</span>
-        <span class="total-count">{{ `￥${total_expenses}` }}</span>
+        <span class="total-count">{{ `￥${totalExpenses}` }}</span>
       </div>
       <div style="margin-left: 15px">
         <span>总收入：</span>
-        <span class="total-count">{{ `￥${total_income}` }}</span>
+        <span class="total-count">{{ `￥${totalIncome}` }}</span>
       </div>
     </div>
     <div class="select-type-date">
