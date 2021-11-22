@@ -4,8 +4,8 @@ import * as dayjs from "dayjs";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 const refPopDate = ref<PopDateAPI | undefined>();
 const selectedDate = ref(new Date());
-const totalExpenses = ref(0); // 总支出
-const totalIncome = ref(0); // 总收入
+const total_expenses = ref(0); // 总支出
+const total_incode = ref(0); // 总收入
 // 账单时间改变
 const handelChangeDate = (date: Date) => {
   if (refPopDate.value) refPopDate.value.showDate = false;
@@ -31,8 +31,8 @@ const handelChangeDate = (date: Date) => {
         /></span>
       </div>
       <span>共支出</span>
-      <span>￥{{ totalExpenses }}</span>
-      <span>共收入 ￥{{ totalIncome }}</span>
+      <span>￥{{ total_expenses }}</span>
+      <span>共收入 ￥{{ total_incode }}</span>
     </div>
   </div>
   <!-- 账单时间弹窗 -->

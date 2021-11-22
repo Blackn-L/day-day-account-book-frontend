@@ -10,14 +10,14 @@ const props = defineProps<{
 }>();
 
 // 当日总支出
-const totalExpenses = computed(() => {
+const total_expenses = computed(() => {
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 1) cur += Number(bill?.amount);
     return cur;
   }, 0);
 });
 // 当日总收入
-const totalIncome = computed(() => {
+const total_incode = computed(() => {
   console.log(props.item.bills);
   return props.item.bills.reduce((cur: number, bill: BillItem) => {
     if (bill.pay_type === 2) cur += Number(bill?.amount);
@@ -43,9 +43,9 @@ const clickDetail = async (id: number | undefined) => {
       <span class="card-title-date"> {{ props.item.date }} </span>
       <span class="card-title-amount">
         <span class="expense"
-          ><van-icon name="minus" />￥{{ totalExpenses }}</span
+          ><van-icon name="minus" />￥{{ total_expenses }}</span
         >
-        <span class="income"><van-icon name="plus" />￥{{ totalIncome }}</span>
+        <span class="income"><van-icon name="plus" />￥{{ total_incode }}</span>
       </span>
     </div>
 

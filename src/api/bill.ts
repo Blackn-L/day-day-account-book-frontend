@@ -9,9 +9,9 @@ interface GetBillListRequest {
 }
 
 interface GetBillListResponse {
-  totalExpense: number; // 总支出
-  totalIncome: number; // 总收入
-  totalPage: number; // 总页数
+  total_expense: number; // 总支出
+  total_incode: number; // 总收入
+  total_page: number; // 总页数
   list: Bill[];
 }
 
