@@ -2,7 +2,9 @@
 import { ref, computed, watch, defineEmits, reactive } from "vue";
 import { Toast } from "vant";
 import * as dayjs from "dayjs";
-import type { DatetimePickerColumnType, BillType, BillItem } from "../index";
+import type { BillType, BillItem } from "../index";
+import type { DatetimePickerColumnType } from "@/components/index";
+import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import { addBill, updateBill } from "@/api/bill";
 
 const { types, initData } = defineProps<{
@@ -29,13 +31,11 @@ const showTypes = computed(() => {
 const showSelectedDate = computed(() => {
   return dayjs(selectedDate.value).format("MM-DD");
 });
+const refPopDate = ref<PopDateAPI>();
 const selectedDate = ref<Date>(new Date());
 const exposeButton = ref<HTMLElement | null>(null);
 const incomeButton = ref(null);
 const payType = ref("expense"); // 支出/收入
-const showDate = ref(false);
-const minDate = ref(new Date(2020, 0, 1)); // 可选账单最小日期
-const maxDate = ref(new Date()); // 可选账单最大日期，为当前日期
 const billAmount = ref<string>(""); // 账单金额
 const billType = reactive<BillType>({
   id: 0,
@@ -80,7 +80,7 @@ const formatter = (type: DatetimePickerColumnType, val: number) => {
   return val;
 };
 const handelChangeDate = (date: Date) => {
-  showDate.value = false;
+  if (refPopDate.value) refPopDate.value.showDate = false;
   selectedDate.value = date;
 };
 
@@ -111,7 +111,7 @@ const reqAddOrUpdateBill = async () => {
     if (code === 200) {
       Toast(message);
       emit("close");
-      emit('onBillUpdated')
+      emit("onBillUpdated");
     }
   } else {
     const { code, message } = await addBill(_param);
@@ -147,7 +147,12 @@ updateBill;
       </div>
 
       <div class="date">
-        <span @click="showDate = true"
+        <span
+          @click="
+            () => {
+              if (refPopDate) refPopDate.showDate = true;
+            }
+          "
           >{{ showSelectedDate }} <van-icon name="arrow-down"
         /></span>
       </div>
@@ -194,18 +199,13 @@ updateBill;
       @close="closeKeyboard"
     />
     <!-- 日期选择 -->
-    <van-popup v-model:show="showDate" position="bottom">
-      <van-datetime-picker
-        style="margin: 10px"
-        v-model="selectedDate"
-        type="month-day"
-        title="选择月日"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :formatter="formatter"
-        @confirm="handelChangeDate"
-      />
-    </van-popup>
+
+    <PopDate
+      ref="refPopDate"
+      :selected-date="selectedDate"
+      type="month-day"
+      @on-change="handelChangeDate"
+    />
   </div>
 </template>
 
