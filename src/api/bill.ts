@@ -10,9 +10,21 @@ interface GetBillListRequest {
 
 interface GetBillListResponse {
   total_expense: number; // 总支出
-  total_incode: number; // 总收入
+  total_income: number; // 总收入
   total_page: number; // 总页数
   list: Bill[];
+}
+
+interface TypesItem {
+  total_amount: number;
+  type_name: string;
+  type_id: number;
+}
+export interface GetBillMonthDataResponse {
+  expense_list: TypesItem[] | [];
+  income_list: TypesItem[] | [];
+  total_expense: number;
+  total_income: number;
 }
 
 // 添加账单
@@ -53,6 +65,14 @@ export function updateBill(params: BillItem) {
 export function deleteBill(id: number) {
   return request({
     url: `/bill/delete?id=${id}`,
+    method: "get",
+  });
+}
+
+// 获取账单当月统计数据
+export function getMonthBillData(date: Date) {
+  return request<GetBillMonthDataResponse>({
+    url: `/bill/date?date=${date}`,
     method: "get",
   });
 }
