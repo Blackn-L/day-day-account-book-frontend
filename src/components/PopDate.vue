@@ -4,8 +4,11 @@ import type { DatetimePickerColumnType } from "./index";
 export interface API {
   showDate: Boolean;
 }
-const { selectedDate } = defineProps<{
+const { selectedDate, formatter, type, title } = defineProps<{
   selectedDate: Date;
+  formatter?: (date: Date | null) => string | number;
+  type?: string | null;
+  title?: string | null;
 }>();
 const emit = defineEmits<{
   (e: "onChange", date: Date): void;
@@ -18,7 +21,7 @@ const maxDate = ref(new Date());
 defineExpose({
   showDate,
 });
-const formatter = (type: DatetimePickerColumnType, val: number) => {
+const _formatter = (type: DatetimePickerColumnType, val: number) => {
   if (type === "year") {
     return `${val}年`;
   }
@@ -34,11 +37,11 @@ const formatter = (type: DatetimePickerColumnType, val: number) => {
     ><van-datetime-picker
       style="margin: 10px"
       v-model="selectedDate"
-      type="year-month"
-      title="选择年月"
+      :type="type || 'year-month'"
+      :title="title || '选择年月'"
       :min-date="minDate"
       :max-date="maxDate"
-      :formatter="formatter"
+      :formatter="formatter || _formatter"
       @confirm="(date:Date) => emit('onChange', date)"
   /></van-popup>
 </template>
