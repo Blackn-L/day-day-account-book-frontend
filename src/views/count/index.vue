@@ -17,7 +17,12 @@ const curTotal = computed(() => {
     ? billMonthData.total_expense
     : billMonthData.total_income;
 });
-
+const expenseClass = computed(() => {
+  return curPayType.value === "expense" ? "expense-actived" : "";
+});
+const incomeClass = computed(() => {
+  return curPayType.value === "income" ? "income-actived" : "";
+});
 // 账单时间改变
 const handelChangeDate = (date: Date) => {
   if (refPopDate.value) refPopDate.value.showDate = false;
@@ -64,10 +69,12 @@ watchEffect(() => {
     <div class="divider" />
     <div class="main">
       <div class="main-header">
-        <span>收支构成</span>
-        <div class="type-button">
-          <span>支出</span>
-          <span>收入</span>
+        <span class="left">收支构成</span>
+        <div class="right">
+          <span :class="expenseClass" @click="curPayType = 'expense'"
+            >支出</span
+          >
+          <span :class="incomeClass" @click="curPayType = 'income'">收入</span>
         </div>
       </div>
       <div class="content">
@@ -156,6 +163,29 @@ watchEffect(() => {
       justify-content: space-between;
       align-items: center;
       margin: 13px 0;
+      .left {
+        font-size: 20px;
+      }
+      .right {
+        span {
+          margin: 0 0 0 10px;
+          padding: 4px 11px;
+          background-color: #f5f5f5;
+          border: 0.5px solid #f5f5f5;
+          color: rgba(0, 0, 0, 0.5);
+        }
+        .expense-actived {
+          background-color: #eafbf6;
+          color: #007fff;
+          border: 0.5px solid #007fff;
+        }
+
+        .income-actived {
+          background-color: #fbf8f0;
+          color: #ecbe25;
+          border: 0.5px solid #ecbe25;
+        }
+      }
     }
     .content {
       display: flex;
