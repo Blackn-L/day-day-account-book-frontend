@@ -25,6 +25,7 @@ import {
   Toast,
   Empty,
   SwipeCell,
+  Progress,
 } from "vant";
 import router from "./router";
 
@@ -52,6 +53,7 @@ app
   .use(NumberKeyboard)
   .use(Toast)
   .use(Empty)
-  .use(SwipeCell);
+  .use(SwipeCell)
+  .use(Progress);
 app.use(router);
 app.mount("#app");
