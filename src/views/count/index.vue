@@ -68,33 +68,41 @@ watchEffect(() => {
     </div>
     <div class="divider" />
     <div class="main">
-      <div class="main-header">
-        <span class="left">收支构成</span>
-        <div class="right">
-          <span :class="expenseClass" @click="curPayType = 'expense'"
-            >支出</span
+      <div class="main-title">收支构成</div>
+      <div class="main-button-type">
+        <span :class="expenseClass" @click="curPayType = 'expense'">支出</span>
+        <span :class="incomeClass" @click="curPayType = 'income'">收入</span>
+      </div>
+      <div>
+        <div class="main-header">
+          <van-tag mark type="success" size="large">进度条</van-tag>
+        </div>
+        <div class="content">
+          <div
+            class="item"
+            v-for="item in curPayType === 'expense'
+              ? billMonthData.expense_list
+              : billMonthData.income_list"
+            :key="item.type_id"
           >
-          <span :class="incomeClass" @click="curPayType = 'income'">收入</span>
+            <div class="title">
+              <span>{{ item.type_name }}</span>
+              <span>￥{{ item.total_amount }}</span>
+            </div>
+            <div class="process">
+              <van-progress
+                :percentage="((item.total_amount / curTotal) * 100).toFixed(2)"
+                stroke-width="8"
+              />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="content">
-        <div
-          class="item"
-          v-for="item in curPayType === 'expense'
-            ? billMonthData.expense_list
-            : billMonthData.income_list"
-          :key="item.type_id"
-        >
-          <div class="title">
-            <span>{{ item.type_name }}</span>
-            <span>￥{{ item.total_amount }}</span>
-          </div>
-          <div class="process">
-            <van-progress
-              :percentage="((item.total_amount / curTotal) * 100).toFixed(2)"
-            />
-          </div>
+      <div>
+        <div class="main-header">
+          <van-tag mark type="success" size="large">环形图</van-tag>
         </div>
+        <div class="content"></div>
       </div>
     </div>
   </div>
@@ -108,7 +116,6 @@ watchEffect(() => {
 
 <style lang="less" scoped>
 .wrapper {
-  // background-color: #f5f5f5;
   .header {
     display: flex;
     flex-direction: column;
@@ -157,47 +164,49 @@ watchEffect(() => {
   }
 
   .main {
-    padding: 0 17px;
-    .main-header {
+    padding: 10px 17px;
+    .main-title {
+      font-size: 20px;
+      text-align: center;
+    }
+    .main-button-type {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 13px 0;
-      .left {
-        font-size: 20px;
+      justify-content: center;
+      margin: 10px 0;
+      span {
+        margin: 0 0 0 10px;
+        padding: 4px 11px;
+        background-color: #f5f5f5;
+        border: 0.5px solid #f5f5f5;
+        color: rgba(0, 0, 0, 0.5);
       }
-      .right {
-        span {
-          margin: 0 0 0 10px;
-          padding: 4px 11px;
-          background-color: #f5f5f5;
-          border: 0.5px solid #f5f5f5;
-          color: rgba(0, 0, 0, 0.5);
-        }
-        .expense-actived {
-          background-color: #eafbf6;
-          color: #007fff;
-          border: 0.5px solid #007fff;
-        }
+      .expense-actived {
+        background-color: #eafbf6;
+        color: #007fff;
+        border: 0.5px solid #007fff;
+      }
 
-        .income-actived {
-          background-color: #fbf8f0;
-          color: #ecbe25;
-          border: 0.5px solid #ecbe25;
-        }
+      .income-actived {
+        background-color: #fbf8f0;
+        color: #ecbe25;
+        border: 0.5px solid #ecbe25;
       }
+    }
+    .main-header {
+      margin: 13px 0;
     }
     .content {
       display: flex;
       flex-direction: column;
-      // justify-content: space-between;
       align-items: flex-start;
 
       .item {
         width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin: 5px 0;
+        margin-bottom: 20px;
         .title {
           flex: 2;
           display: flex;
