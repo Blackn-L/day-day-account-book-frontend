@@ -3,6 +3,7 @@ import { ref, reactive, watchEffect, computed } from "vue";
 import * as dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
+import F2 from "@antv/f2";
 const refPopDate = ref<PopDateAPI | undefined>();
 const selectedDate = ref(new Date());
 const curPayType = ref<"expense" | "income">("expense");
@@ -30,13 +31,74 @@ const handelChangeDate = (date: Date) => {
 };
 
 const regGetMonthBillData = async () => {
-  const { data, code } = await getMonthBillData(selectedDate.value);
-  if (code === 200) Object.assign(billMonthData, data);
+  try {
+    const { data, code } = await getMonthBillData(selectedDate.value);
+    if (code === 200) Object.assign(billMonthData, data);
+  } catch (error) {
+  } finally {
+    initChart();
+  }
+};
+
+const initChart = () => {
+
+  const _map: { [key: string]: string } = {};
+  const _data: { name: string; percent: number; a: string }[] = [];
+  billMonthData.expense_list.forEach((obj) => {
+    _map[obj.type_name] =
+      ((obj.total_amount / curTotal.value) * 100).toFixed(2) + "%";
+    _data.push({
+      name: obj.type_name,
+      percent: Number(((obj.total_amount / curTotal.value) * 100).toFixed(2)),
+      a: "1",
+    });
+  });
+
+  const chart = new F2.Chart({
+    id: "donutChart",
+    pixelRatio: window.devicePixelRatio,
+    padding: [20, "auto"],
+  });
+  chart.source(_data, {
+    percent: {
+      formatter: function formatter(val) {
+        return val + "%";
+      },
+    },
+  });
+  chart.tooltip(false);
+  chart.legend({
+    position: "right",
+    itemFormatter: function itemFormatter(val) {
+      return val + "    " + _map[val];
+    },
+  });
+  chart.coord("polar", {
+    transposed: true,
+    innerRadius: 0.7,
+    radius: 0.85,
+  });
+  chart.axis(false);
+  chart
+    .interval()
+    .position("a*percent")
+    .color("name", ["#FE5D4D", "#3BA4FF", "#737DDE"])
+    .adjust("stack");
+
+  chart.guide().text({
+    position: ["50%", "50%"],
+    content: `￥${curTotal.value}`,
+    style: {
+      fill: "#1890FF",
+    },
+  });
+  chart.render();
 };
 
 watchEffect(() => {
   regGetMonthBillData();
 });
+
 </script>
 
 <template>
@@ -102,7 +164,9 @@ watchEffect(() => {
         <div class="main-header">
           <van-tag mark type="success" size="large">环形图</van-tag>
         </div>
-        <div class="content"></div>
+        <div class="content">
+          <canvas id="donutChart" />
+        </div>
       </div>
     </div>
   </div>
