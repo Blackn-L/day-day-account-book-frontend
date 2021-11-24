@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watchEffect } from "vue";
+import { ref, reactive, watchEffect, computed } from "vue";
 import * as dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
@@ -11,6 +11,11 @@ const billMonthData = reactive<GetBillMonthDataResponse>({
   income_list: [],
   total_expense: 0,
   total_income: 0,
+});
+const curTotal = computed(() => {
+  return curPayType.value === "expense"
+    ? billMonthData.total_expense
+    : billMonthData.total_income;
 });
 
 // 账单时间改变
@@ -56,6 +61,35 @@ watchEffect(() => {
         <span>共支出 ￥{{ billMonthData.total_expense }}</span>
       </div>
     </div>
+    <div class="divider" />
+    <div class="main">
+      <div class="main-header">
+        <span>收支构成</span>
+        <div class="type-button">
+          <span>支出</span>
+          <span>收入</span>
+        </div>
+      </div>
+      <div class="content">
+        <div
+          class="item"
+          v-for="item in curPayType === 'expense'
+            ? billMonthData.expense_list
+            : billMonthData.income_list"
+          :key="item.type_id"
+        >
+          <div class="title">
+            <span>{{ item.type_name }}</span>
+            <span>￥{{ item.total_amount }}</span>
+          </div>
+          <div class="process">
+            <van-progress
+              :percentage="((item.total_amount / curTotal) * 100).toFixed(2)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- 账单时间弹窗 -->
   <PopDate
@@ -67,7 +101,7 @@ watchEffect(() => {
 
 <style lang="less" scoped>
 .wrapper {
-  background-color: #f5f5f5;
+  // background-color: #f5f5f5;
   .header {
     display: flex;
     flex-direction: column;
@@ -79,8 +113,8 @@ watchEffect(() => {
     font-weight: 500;
     .date {
       background-color: #f5f5f5;
-      font-size: 16px;
-      padding: 7px;
+      font-size: 15px;
+      padding: 5px;
     }
     .amount-base {
       display: flex;
@@ -106,6 +140,56 @@ watchEffect(() => {
     }
     .income {
       color: #ecbe25;
+    }
+  }
+
+  .divider {
+    color: #f5f5f5;
+    background-color: #f5f5f5;
+    border: 5px solid #f5f5f5;
+  }
+
+  .main {
+    padding: 0 17px;
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 13px 0;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      // justify-content: space-between;
+      align-items: flex-start;
+
+      .item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+        .title {
+          flex: 2;
+          display: flex;
+          justify-content: space-between;
+          margin-right: 11px;
+        }
+        .process {
+          flex: 7;
+        }
+        //   .title {
+        //     display: flex;
+        //     justify-content: space-between;
+        //     align-items: center;
+        //     span:nth-child(1) {
+        //       margin: 4px;
+        //     }
+        //     span:nth-child(2) {
+        //       font-size: 23px;
+        //       font-weight: 600;
+        //     }
+        //   }
+      }
     }
   }
 }
