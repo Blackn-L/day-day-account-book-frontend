@@ -33,8 +33,7 @@ const showSelectedDate = computed(() => {
 });
 const refPopDate = ref<PopDateAPI>();
 const selectedDate = ref<Date>(new Date());
-const exposeButton = ref<HTMLElement | null>(null);
-const incomeButton = ref(null);
+
 const payType = ref("expense"); // 支出/收入
 const billAmount = ref<string>(""); // 账单金额
 const billType = reactive<BillType>({
@@ -130,18 +129,10 @@ updateBill;
   <div class="add-wrapper">
     <div class="add-header">
       <div class="type">
-        <span
-          :class="expenseClass"
-          ref="exposeButton"
-          @click="choosePayType('expense')"
-        >
+        <span :class="expenseClass" @click="choosePayType('expense')">
           支出
         </span>
-        <span
-          :class="incomeClass"
-          ref="incomeButton"
-          @click="choosePayType('income')"
-        >
+        <span :class="incomeClass" @click="choosePayType('income')">
           收入
         </span>
       </div>
