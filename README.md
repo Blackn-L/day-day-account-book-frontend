@@ -1,9 +1,13 @@
 # 呆呆记账本
 > 自己写的移动端记账本，Vue3 + Typescript + Vite + Vant3，可以作为该类技术栈项目搭建的参考
-> 页面基本 UI 和逻辑基于 Nick 大佬的 React 版[https://github.com/Nick930826/juejue-vite-h5]，在此基础上加了些自己的想法
+> 页面基本 UI 和逻辑基于 [Nick 大佬的 React 版](https://github.com/Nick930826/juejue-vite-h)，在此基础上加了些自己的想法
 
 ## 在线体验
 待部署
+
+## 后端
+[呆呆记账本后端](https://github.com/Blackn-L/day-day-account-book-backend)
+
 ## 插件
 * `Vue-Router`
 * `axios` 接口请求库，进行二次封装，采用 Hooks 风格
@@ -28,8 +32,6 @@
 * 账单统计(已完成)
 * 个人中心(待开发)
 * 全局路由守卫，验证 token（已完成）
-## 后端
-待上传
 ## 构建步骤
 ``` bash
 # 克隆项目
