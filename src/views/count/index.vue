@@ -40,8 +40,8 @@ const regGetMonthBillData = async () => {
   }
 };
 
+// 创建环形图
 const initChart = () => {
-
   const _map: { [key: string]: string } = {};
   const _data: { name: string; percent: number; a: string }[] = [];
   billMonthData.expense_list.forEach((obj) => {
