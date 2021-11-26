@@ -11,7 +11,7 @@ console.log("MODE: ", MODE);
 const service = axios.create({
   // 开发环境请求本地代理，生产环境请求域名
   // 开发环境在接口面前自动加上 api，配合 本地代理使用，无需在每个接口前写 /api
-  baseURL: MODE === "development" ? "/api" : "http://api.svip52.com/pocket/",
+  baseURL: MODE === "development" ? "/api" : "http://api.svip52.com/ab/",
   headers: {
     "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "application/json",
