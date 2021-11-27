@@ -3,9 +3,8 @@ on: # main 分支有推送就触发
   push:
     branches:
       - main
-
-paths-ignore: # 下列文件的变更不触发部署
-  - README.md
+    paths-ignore: # 下列文件的变更不触发部署
+      - README.md
 
 jobs:
   build:
