@@ -1,0 +1,36 @@
+name: Day Day Account Book CI/CD
+strategy:
+  matrix:
+    os: [ubuntu-20.04]
+    node: [14.17.3]
+on: # main 分支有推送就触发
+  push:
+    branches:
+      - main
+
+paths-ignore: # 下列文件的变更不触发部署
+  - README.md
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}} # 需要运行在哪个版本系统上，由 GitHub 提供
+    steps:
+      - uses: actions/checkout@v1 # 检出仓库副本，actions/checkout@v2 是官方插件
+      - name: Install Node.js
+        uses: actions/setup-node@v2 # 安装 Node，官方插件
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main # 大佬的插件，将打包文件推送到服务器
+        env:
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "/dist/* " # 要推送的文件夹，也就是我们仓库根目录下的打包文件夹 dist，我这里推送整个文件夹内的文件过去，不包含文件夹
+          # 下面这个几个参数在 仓库页 -> Setting -> Secrets -> New repository sceret 添加，如 Name: REMOTE_HOST ;Value:22
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }} # 服务器私钥
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
