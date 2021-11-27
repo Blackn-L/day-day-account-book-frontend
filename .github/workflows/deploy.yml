@@ -1,8 +1,4 @@
 name: Day Day Account Book CI/CD
-strategy:
-  matrix:
-    os: [ubuntu-20.04]
-    node: [14.17.3]
 on: # main 分支有推送就触发
   push:
     branches:
@@ -13,6 +9,10 @@ paths-ignore: # 下列文件的变更不触发部署
 
 jobs:
   build:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        node: [14.17.3]
     runs-on: ${{matrix.os}} # 需要运行在哪个版本系统上，由 GitHub 提供
     steps:
       - uses: actions/checkout@v1 # 检出仓库副本，actions/checkout@v2 是官方插件
