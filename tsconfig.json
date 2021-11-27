@@ -11,6 +11,8 @@
     "jsx": "preserve",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "types": ["vite/client"], // 增加对 vite 环境变量类型等支持，https://cn.vitejs.dev/guide/features.html#client-types
     "baseUrl": "./",
     "paths": {

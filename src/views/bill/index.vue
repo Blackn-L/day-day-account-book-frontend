@@ -4,10 +4,9 @@ import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
 import AddBill from "./components/AddBill.vue";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
-import type { BillType, Bill } from "./index";
-import * as _dayjs from "dayjs";
+import dayjs from "dayjs";
 import { getBillList } from "@/api/bill";
-const dayjs = _dayjs // import * as dayjs 打包时候会报错
+import type { BillType, Bill } from "./index";
 // 利用 ref 获取子组件时，如果是 defineExpose 暴露出来的，需要主动声明其类型
 // https://github.com/vuejs/rfcs/pull/210#issuecomment-727067392
 let types = reactive<BillType[]>([]);

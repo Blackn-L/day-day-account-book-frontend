@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, defineEmits, reactive } from "vue";
 import { Toast } from "vant";
-import * as _dayjs from "dayjs";
+import dayjs from 'dayjs';
 import type { BillType, BillItem } from "../index";
 import type { DatetimePickerColumnType } from "@/components/index";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import { addBill, updateBill } from "@/api/bill";
-const dayjs = _dayjs
 const { types, initData } = defineProps<{
   types: BillType[];
   initData: BillItem;
