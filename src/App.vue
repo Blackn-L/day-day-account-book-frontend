@@ -118,8 +118,5 @@ watchEffect(() => {
     clear: both;
     visibility: hidden;
   }
-  .clearfix {
-    *zoom: 1;
-  }
 }
 </style>
