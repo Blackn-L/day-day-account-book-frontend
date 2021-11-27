@@ -6,7 +6,7 @@ import Header from "@/components/Header.vue";
 import AddBill from "./AddBill.vue";
 import { getBillDetail, deleteBill } from "@/api/bill";
 import type { BillItem } from "../index";
-import * as dayjs from "dayjs";
+import * as _dayjs from "dayjs";
 import { BillType } from "../index";
 let types = reactive<BillType[]>([]);
 types = [
@@ -61,6 +61,7 @@ types = [
     type: 2,
   },
 ];
+const dayjs = _dayjs
 const route = useRoute();
 const router = useRouter();
 const detail = reactive<BillItem>({});

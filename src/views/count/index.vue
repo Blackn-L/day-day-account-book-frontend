@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect, computed } from "vue";
-import * as dayjs from "dayjs";
+import * as _dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import F2 from "@antv/f2";
+const dayjs = _dayjs
 const refPopDate = ref<PopDateAPI | undefined>();
 const selectedDate = ref(new Date());
 const curPayType = ref<"expense" | "income">("expense");

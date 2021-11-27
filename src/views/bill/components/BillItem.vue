@@ -3,9 +3,9 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { Toast } from "vant";
 import type { Bill, BillItem } from "../index";
-import * as dayjs from "dayjs";
+import * as _dayjs from "dayjs";
 import { deleteBill } from "@/api/bill";
-
+const dayjs = _dayjs
 //  https://v3.cn.vuejs.org/api/sfc-script-setup.html#%E4%BB%85%E9%99%90-typescript-%E7%9A%84%E5%8A%9F%E8%83%BD
 const props = defineProps<{
   item: Bill;
