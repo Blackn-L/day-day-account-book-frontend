@@ -31,5 +31,6 @@ jobs:
           # 下面这个几个参数在 仓库页 -> Setting -> Secrets -> New repository sceret 添加，如 Name: REMOTE_HOST ;Value:22
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }} # 服务器私钥
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
