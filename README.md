@@ -42,7 +42,10 @@ git clone git@github.com:Blackn-L/day-day-account-book-frontend.git
 cd day-day-account-book-frontend
 
 # 安装依赖，推荐 yarn
-yarn
+yarn # npm i
 
 #  启动项目
-yarn dev
+yarn dev # npm run dev
+
+# 打包项目
+yarn build # npm run build
