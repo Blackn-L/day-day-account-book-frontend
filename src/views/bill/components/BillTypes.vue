@@ -25,7 +25,6 @@ const incomeTypes = computed(() => {
 
 // 选择类型，并关闭弹窗
 const handleChooseType = (typeObj: BillType) => {
-  console.log("typeObj: ", typeObj);
   selectedTypeId.value = typeObj.id;
   emit("handle-change-type", typeObj);
 };
