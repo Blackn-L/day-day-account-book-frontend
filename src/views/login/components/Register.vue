@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import { register, LoginAndRegParams } from "@/api/user";
 import { Toast } from "vant";
 

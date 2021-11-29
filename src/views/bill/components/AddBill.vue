@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, defineEmits, reactive } from "vue";
+import { ref, computed, watch, reactive } from "vue";
 import { Toast } from "vant";
 import dayjs from "dayjs";
 import type { BillType, BillItem } from "../index";
