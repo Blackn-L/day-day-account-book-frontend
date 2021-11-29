@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, defineEmits, reactive } from "vue";
 import { Toast } from "vant";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import type { BillType, BillItem } from "../index";
-import type { DatetimePickerColumnType } from "@/components/index";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import { addBill, updateBill } from "@/api/bill";
 const { types, initData } = defineProps<{
@@ -67,16 +66,6 @@ watch(
 const choosePayType = (type: string) => {
   payType.value = type;
 };
-// 日期选择器格式化
-const formatter = (type: DatetimePickerColumnType, val: number) => {
-  if (type === "month") {
-    return `${val}月`;
-  }
-  if (type === "day") {
-    return `${val}日`;
-  }
-  return val;
-};
 const handelChangeDate = (date: Date) => {
   if (refPopDate.value) refPopDate.value.showDate = false;
   selectedDate.value = date;
@@ -93,7 +82,7 @@ const closeKeyboard = () => {
   }
   reqAddOrUpdateBill();
 };
-// 新增
+// 新增 or 更新
 const reqAddOrUpdateBill = async () => {
   const _param: BillItem = {
     amount: billAmount.value,
@@ -120,8 +109,6 @@ const reqAddOrUpdateBill = async () => {
     }
   }
 };
-// 更新
-updateBill;
 </script>
 
 <template>
