@@ -6,7 +6,7 @@ import Header from "@/components/Header.vue";
 import AddBill from "./AddBill.vue";
 import { getBillDetail, deleteBill } from "@/api/bill";
 import type { BillItem } from "../index";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { BillType } from "../index";
 let types = reactive<BillType[]>([]);
 types = [
@@ -66,6 +66,8 @@ const router = useRouter();
 const detail = reactive<BillItem>({});
 const showAddPop = ref(false);
 const id = Number(route.query.id);
+// 每次打开都重新渲染该组件
+let addBillKey = 1;
 onMounted(() => {
   reqGetBillDetail(id);
 });
@@ -138,9 +140,14 @@ const handleBillUpdated = () => {
     <van-empty image="error" description="暂无该账单数据" />
   </div>
   <!-- 添加账单弹窗 -->
-  <van-popup v-model:show="showAddPop" position="bottom" round
+  <van-popup
+    v-model:show="showAddPop"
+    @closed="addBillKey++"
+    position="bottom"
+    round
     ><AddBill
       :types="types"
+      :key="addBillKey"
       :defaultData="detail"
       @close="showAddPop = false"
       @on-bill-updated="handleBillUpdated"

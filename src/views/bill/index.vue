@@ -80,7 +80,8 @@ const listRefreshing = ref(false); // 账单列表是否正在刷新
 const selectedDate = ref<Date>(new Date());
 let billList = ref<Bill[]>([]);
 const currentPage = ref(1);
-
+// 每次打开都重新渲染该组件，addBill
+let addBillKey = 1;
 // 账单类型改变
 const handleChangeType = (typeObj: BillType) => {
   showType.value = false;
@@ -208,9 +209,14 @@ const onLoad = async () => {
   </div>
 
   <!-- 添加账单弹窗 -->
-  <van-popup v-model:show="showAddPop" position="bottom" round
+  <van-popup
+    v-model:show="showAddPop"
+    @closed="addBillKey++"
+    position="bottom"
+    round
     ><AddBill
       @on-bill-added="handleBillAdded"
+      :key="addBillKey"
       :types="types"
       :defaultData="{}"
       @close="showAddPop = false"

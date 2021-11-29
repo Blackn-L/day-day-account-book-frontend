@@ -48,10 +48,10 @@ watch(
   },
   { deep: true, immediate: true }
 );
+
 watch(
   () => defaultData,
   () => {
-    console.log("defaultData: ", defaultData);
     if (Object.keys(defaultData).length > 0) {
       billAmount.value = defaultData.amount || "";
       billType.id = defaultData.type_id || 0;
@@ -63,6 +63,7 @@ watch(
   },
   { deep: true, immediate: true }
 );
+
 // 选择支出还是收入
 const choosePayType = (type: string) => {
   payType.value = type;
@@ -93,21 +94,26 @@ const reqAddOrUpdateBill = async () => {
     pay_type: payType.value === "expense" ? 1 : 2,
     remark: remark.value,
   };
-  if (defaultData.id) {
-    _param.id = defaultData.id;
-    const { code, message } = await updateBill(_param);
-    if (code === 200) {
-      Toast(message);
-      emit("close");
-      emit("onBillUpdated");
+  try {
+    if (defaultData.id) {
+      _param.id = defaultData.id;
+      const { code, message } = await updateBill(_param);
+      if (code === 200) {
+        Toast(message);
+        emit("close");
+        emit("onBillUpdated");
+      }
+    } else {
+      const { code, message } = await addBill(_param);
+      if (code === 200) {
+        Toast(message);
+        emit("close");
+        emit("onBillAdded");
+      }
     }
-  } else {
-    const { code, message } = await addBill(_param);
-    if (code === 200) {
-      Toast(message);
-      emit("close");
-      emit("onBillAdded");
-    }
+  } catch (error) {
+    console.log("error: ", error);
+  } finally {
   }
 };
 </script>
