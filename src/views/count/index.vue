@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect, computed } from "vue";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import F2 from "@antv/f2";
@@ -41,10 +41,10 @@ const regGetMonthBillData = async () => {
 };
 
 // 创建环形图
-const initChart = () => {
+const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   const _map: { [key: string]: string } = {};
   const _data: { name: string; percent: number; a: string }[] = [];
-  billMonthData.expense_list.forEach((obj) => {
+  billMonthData[type].forEach((obj) => {
     _map[obj.type_name] =
       ((obj.total_amount / curTotal.value) * 100).toFixed(2) + "%";
     _data.push({
@@ -94,11 +94,14 @@ const initChart = () => {
   });
   chart.render();
 };
+const changeCurType = (type: "expense" | "income") => {
+  curPayType.value = type;
+  initChart(type === "expense" ? "expense_list" : "income_list");
+};
 
 watchEffect(() => {
   regGetMonthBillData();
 });
-
 </script>
 
 <template>
@@ -132,8 +135,10 @@ watchEffect(() => {
     <div class="main">
       <div class="main-title">收支构成</div>
       <div class="main-button-type">
-        <span :class="expenseClass" @click="curPayType = 'expense'">支出</span>
-        <span :class="incomeClass" @click="curPayType = 'income'">收入</span>
+        <span :class="expenseClass" @click="changeCurType('expense')"
+          >支出</span
+        >
+        <span :class="incomeClass" @click="changeCurType('income')">收入</span>
       </div>
       <div>
         <div class="main-header">
