@@ -212,7 +212,7 @@ const onLoad = async () => {
     ><AddBill
       @on-bill-added="handleBillAdded"
       :types="types"
-      :initData="{}"
+      :defaultData="{}"
       @close="showAddPop = false"
     />
     /></van-popup

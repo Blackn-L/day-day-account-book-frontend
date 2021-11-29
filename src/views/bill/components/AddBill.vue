@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 import type { BillType, BillItem } from "../index";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import { addBill, updateBill } from "@/api/bill";
-const { types, initData } = defineProps<{
+const { types, defaultData } = defineProps<{
   types: BillType[];
-  initData: BillItem;
+  defaultData: BillItem;
 }>();
 const emit = defineEmits<{
   (e: "close"): void;
@@ -49,15 +49,16 @@ watch(
   { deep: true, immediate: true }
 );
 watch(
-  () => initData,
+  () => defaultData,
   () => {
-    if (Object.keys(initData).length > 0) {
-      billAmount.value = initData.amount || "";
-      billType.id = initData.type_id || 0;
-      billType.name = initData.type_name || "";
-      selectedDate.value = new Date(Number(initData.date || ""));
-      remark.value = initData.remark || "";
-      payType.value = initData.pay_type === 1 ? "expense" : "income";
+    console.log("defaultData: ", defaultData);
+    if (Object.keys(defaultData).length > 0) {
+      billAmount.value = defaultData.amount || "";
+      billType.id = defaultData.type_id || 0;
+      billType.name = defaultData.type_name || "";
+      selectedDate.value = new Date(Number(defaultData.date || ""));
+      remark.value = defaultData.remark || "";
+      payType.value = defaultData.pay_type === 1 ? "expense" : "income";
     }
   },
   { deep: true, immediate: true }
@@ -92,8 +93,8 @@ const reqAddOrUpdateBill = async () => {
     pay_type: payType.value === "expense" ? 1 : 2,
     remark: remark.value,
   };
-  if (initData.id) {
-    _param.id = initData.id;
+  if (defaultData.id) {
+    _param.id = defaultData.id;
     const { code, message } = await updateBill(_param);
     if (code === 200) {
       Toast(message);

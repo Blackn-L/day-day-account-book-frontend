@@ -141,7 +141,7 @@ const handleBillUpdated = () => {
   <van-popup v-model:show="showAddPop" position="bottom" round
     ><AddBill
       :types="types"
-      :initData="detail"
+      :defaultData="detail"
       @close="showAddPop = false"
       @on-bill-updated="handleBillUpdated"
     />
