@@ -285,18 +285,9 @@ watchEffect(() => {
         .process {
           flex: 7;
         }
-        //   .title {
-        //     display: flex;
-        //     justify-content: space-between;
-        //     align-items: center;
-        //     span:nth-child(1) {
-        //       margin: 4px;
-        //     }
-        //     span:nth-child(2) {
-        //       font-size: 23px;
-        //       font-weight: 600;
-        //     }
-        //   }
+      }
+      #donutChart {
+        margin-bottom: 40px;
       }
     }
   }
