@@ -3,10 +3,15 @@
 > 页面基本 UI 和逻辑基于 [Nick 大佬的 React 版](https://github.com/Nick930826/juejue-vite-h)，在此基础上加了些自己的想法
 
 ## 在线体验
-待部署
+http://ab.svip52.com
+
 
 ## 后端
 [呆呆记账本后端](https://github.com/Blackn-L/day-day-account-book-backend)
+
+已部署线上接口[http://api.svip52.com/ab/]
+
+不想部署后端的话，直接在该线上接口后面加上相应接口地址即可
 
 ## 插件
 * `Vue-Router`
