@@ -51,7 +51,7 @@ const loginOut = () => {
       </van-cell-group>
     </div>
     <div class="footer">
-      <van-button class="login-out-button" type="danger" @click="loginOut"
+      <van-button size="large" type="danger" @click="loginOut"
         >退出登录</van-button
       >
     </div>
@@ -95,13 +95,7 @@ const loginOut = () => {
     font-size: 17px;
   }
   .footer {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    .login-out-button {
-      width: 90%;
-      margin: 10px 0;
-    }
+    margin: 10px;
   }
 }
 </style>
