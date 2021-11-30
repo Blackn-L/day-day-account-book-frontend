@@ -2,7 +2,7 @@
 import { reactive } from "vue";
 const userinfo = reactive({
   name: "admin",
-  signature: "hi,world",
+  signature: "hi,world, just do what u like",
   avatar:
     "https://cdn.jsdelivr.net/gh/Blackn-L/Picture/blog/20211003210108.png",
 });
@@ -33,19 +33,18 @@ const loginOut = () => {
       <div class="header-avatar">
         <van-image
           round
-          fit="scale-down"
-          width="64"
-          height="64"
+          fit="contain"
+          width="80"
+          height="80"
           :src="userinfo.avatar"
           alt="头像"
         />
       </div>
       <div class="header-name">
-        <span> 昵称: {{ userinfo.name }} </span>
-
-        <div class="header-signature">
-          <span>{{ userinfo.signature }}</span>
-        </div>
+        <span> {{ userinfo.name }} </span>
+      </div>
+      <div class="header-signature">
+        <span>{{ userinfo.signature }}</span>
       </div>
     </div>
     <div class="content">
@@ -80,27 +79,34 @@ const loginOut = () => {
   .header {
     display: grid;
     grid-template-columns: repeat(3, 2fr);
-    grid-template-rows: repeat(3, 2fr);
+    grid-template-rows: 0.3fr 0.8fr 0.5fr 0.8fr;
     align-items: center;
     justify-items: center;
     .header-avatar {
       grid-column-start: 2;
+      grid-row-start: 2;
+      div {
+        border: 2px solid #fff;
+      }
     }
     .header-name {
       grid-column-start: 2;
+      grid-row-start: 3;
       font-weight: 700;
+      font-size: 22px;
       color: #fff;
-      background-color: #597fe7;
-
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: 2fr;
+    }
+    .header-signature {
+      grid-column-start: 1;
+      grid-column-end: 4;
+      grid-row-start: 4;
+      font-size: 18px;
+      color: #fff;
     }
   }
   .content {
     grid-row-start: 2;
     font-size: 17px;
-    margin-top: -32px;
   }
   .footer {
     margin: 10px;
