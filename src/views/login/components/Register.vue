@@ -4,7 +4,7 @@ import { register, LoginAndRegParams } from "@/api/user";
 import { Toast } from "vant";
 
 const emit = defineEmits<{
-  (e: "toLogin"): void;
+  (e: "toLogin", username: string): void;
 }>();
 const username = ref<string>("");
 const password = ref<string>("");
@@ -16,9 +16,11 @@ const onSubmit = async (values: LoginAndRegParams) => {
   try {
     const { message, code } = await register(values);
     if (code === 200) {
-      Toast.success(message);
+      Toast.success({ message, duration: 700 });
       setTimeout(() => {
-        emit("toLogin");
+        emit("toLogin", username.value);
+        username.value = "";
+        password.value = "";
       }, 500);
     }
   } catch (error) {
@@ -34,7 +36,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
         v-model="username"
         name="username"
         label="用户名"
-        placeholder="用户名"
+        placeholder="输入用户名"
         clearable
         :rules="[{ required: true, message: '请填写用户名' }]"
       />
@@ -43,7 +45,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
         type="password"
         name="password"
         label="密码"
-        placeholder="密码"
+        placeholder="输入密码"
         clearable
         :rules="[{ required: true, message: '请填写密码' }]"
       />

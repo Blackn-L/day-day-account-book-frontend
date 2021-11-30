@@ -3,9 +3,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Toast } from "vant";
 import { login, LoginAndRegParams } from "@/api/user";
+export interface API {
+  username: string;
+}
 const router = useRouter();
-const username = ref<string>("");
-const password = ref<string>("");
+const username = ref("");
+const password = ref("");
+
 const onSubmit = async (values: LoginAndRegParams) => {
   if (!values?.username?.trim() || !values?.password?.trim()) {
     Toast.fail("请输入用户名或密码");
@@ -24,6 +28,9 @@ const onSubmit = async (values: LoginAndRegParams) => {
     console.log("error: ", error);
   }
 };
+defineExpose({
+  username,
+});
 </script>
 
 <template>
@@ -33,6 +40,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
         v-model="username"
         name="username"
         label="用户名"
+        placeholder="输入用户名"
         clearable
         :rules="[{ required: true, message: '请填写用户名' }]"
       />
@@ -40,6 +48,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
         v-model="password"
         type="password"
         name="password"
+        placeholder="输入密码"
         label="密码"
         clearable
         :rules="[{ required: true, message: '请填写密码' }]"
