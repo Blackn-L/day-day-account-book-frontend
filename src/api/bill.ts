@@ -70,7 +70,7 @@ export function deleteBill(id: number) {
 }
 
 // 获取账单当月统计数据
-export function getMonthBillData(date: Date) {
+export function getMonthBillData(date: number) {
   return request<GetBillMonthDataResponse>({
     url: `/bill/date?date=${date}`,
     method: "get",

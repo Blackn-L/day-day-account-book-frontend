@@ -32,7 +32,7 @@ const handelChangeDate = (date: Date) => {
 
 const regGetMonthBillData = async () => {
   try {
-    const { data, code } = await getMonthBillData(selectedDate.value);
+    const { data, code } = await getMonthBillData(selectedDate.value.getTime());
     if (code === 200) Object.assign(billMonthData, data);
   } catch (error) {
   } finally {
