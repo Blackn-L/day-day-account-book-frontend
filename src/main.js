@@ -26,6 +26,7 @@ import {
   Empty,
   SwipeCell,
   Progress,
+  Image as VanImage,
 } from "vant";
 import router from "./router";
 
@@ -54,6 +55,7 @@ app
   .use(Toast)
   .use(Empty)
   .use(SwipeCell)
-  .use(Progress);
+  .use(Progress)
+  .use(VanImage);
 app.use(router);
 app.mount("#app");

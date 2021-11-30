@@ -30,12 +30,22 @@ const loginOut = () => {
 <template>
   <div class="wrapper">
     <div class="header">
-      <div class="header-left">
-        <span> 昵称: {{ userinfo.name }} </span>
-        <span>{{ userinfo.signature }}</span>
+      <div class="header-avatar">
+        <van-image
+          round
+          fit="scale-down"
+          width="64"
+          height="64"
+          :src="userinfo.avatar"
+          alt="头像"
+        />
       </div>
-      <div class="header-right">
-        <img :src="userinfo.avatar" alt="头像" />
+      <div class="header-name">
+        <span> 昵称: {{ userinfo.name }} </span>
+
+        <div class="header-signature">
+          <span>{{ userinfo.signature }}</span>
+        </div>
       </div>
     </div>
     <div class="content">
@@ -61,38 +71,36 @@ const loginOut = () => {
 <style lang="less" scoped>
 .wrapper {
   display: grid;
-  height: 90vh;
+  height: 95vh;
   grid-template-rows: 1.5fr 3fr 1fr;
   align-items: stretch;
-  margin: 5%;
+  padding: 3%;
   font-size: 18px;
+  background: url("@/assets/user.jpeg") no-repeat;
   .header {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-columns: repeat(3, 2fr);
     grid-template-rows: repeat(3, 2fr);
     align-items: center;
     justify-items: center;
-    .header-left {
+    .header-avatar {
+      grid-column-start: 2;
+    }
+    .header-name {
+      grid-column-start: 2;
       font-weight: 700;
       color: #fff;
       background-color: #597fe7;
-      grid-column-start: 1;
+
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 2fr;
-    }
-    .header-right {
-      grid-column-start: 3;
-      img {
-        width: 60px;
-        height: 60px;
-        border-radius: 15%;
-      }
     }
   }
   .content {
     grid-row-start: 2;
     font-size: 17px;
+    margin-top: -32px;
   }
   .footer {
     margin: 10px;

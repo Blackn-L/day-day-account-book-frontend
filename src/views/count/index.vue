@@ -45,7 +45,6 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   const _map: { [key: string]: string } = {};
   const _data: { name: string; percent: number; a: string }[] = [];
   billMonthData[type].forEach((obj) => {
-    console.log('obj: ', obj);
     _map[obj.type_name] =
       ((obj.total_amount / curTotal.value) * 100).toFixed(2) + "%";
     _data.push({
