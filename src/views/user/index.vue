@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { Toast } from "vant";
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const userinfo = reactive({
   name: "admin",
   signature: "hi,world, just do what u like",
@@ -24,6 +27,11 @@ const aboutMe = () => {
 // 退出登录
 const loginOut = () => {
   console.log("退出登录");
+  localStorage.removeItem("token");
+  Toast.success({ message: "退出成功", duration: 1000 });
+  setTimeout(() => {
+    router.push("/login");
+  }, 1000);
 };
 </script>
 
