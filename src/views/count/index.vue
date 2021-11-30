@@ -45,6 +45,7 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   const _map: { [key: string]: string } = {};
   const _data: { name: string; percent: number; a: string }[] = [];
   billMonthData[type].forEach((obj) => {
+    console.log('obj: ', obj);
     _map[obj.type_name] =
       ((obj.total_amount / curTotal.value) * 100).toFixed(2) + "%";
     _data.push({
@@ -57,7 +58,7 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   const chart = new F2.Chart({
     id: "donutChart",
     pixelRatio: window.devicePixelRatio,
-    padding: [20, "auto"],
+    padding: [5, "auto"],
   });
   chart.source(_data, {
     percent: {
@@ -90,6 +91,8 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
     content: `￥${curTotal.value}`,
     style: {
       fill: "#1890FF",
+      fontSize: 18,
+      fontWeight: "bold",
     },
   });
   chart.render();
