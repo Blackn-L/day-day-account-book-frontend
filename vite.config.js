@@ -12,7 +12,9 @@ export default defineConfig({
         {
           libraryName: "vant",
           esModule: true,
-          resolveStyle: (name) => `vant/es/${name}/style`,
+          // https://github.com/anncwb/vite-plugin-style-import/issues/52
+          // 不加/node_modules 打包会报错，当前 vite-plugin-style-import 的 bug，待修复
+          resolveStyle: (name) => `/node_modules/vant/es/${name}/style`,
         },
       ],
     }),
