@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, watchEffect, computed } from "vue";
+import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
 import F2 from "@antv/f2";
+const router = useRouter();
 const refPopDate = ref<PopDateAPI | undefined>();
 const selectedDate = ref(new Date());
 const curPayType = ref<"expense" | "income">("expense");
@@ -42,6 +44,8 @@ const regGetMonthBillData = async () => {
 
 // 创建环形图
 const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
+  // 如果支出或者收入为 0，则不渲染
+  if (!curTotal.value) return;
   const _map: { [key: string]: string } = {};
   const _data: { name: string; percent: number; a: string }[] = [];
   billMonthData[type].forEach((obj) => {
@@ -142,7 +146,7 @@ watchEffect(() => {
         >
         <span :class="incomeClass" @click="changeCurType('income')">收入</span>
       </div>
-      <div>
+      <div v-if="curTotal > 0">
         <div class="main-header">
           <van-tag mark type="success" size="large">进度条</van-tag>
         </div>
@@ -167,7 +171,7 @@ watchEffect(() => {
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="curTotal > 0">
         <div class="main-header">
           <van-tag mark type="success" size="large">环形图</van-tag>
         </div>
@@ -175,6 +179,19 @@ watchEffect(() => {
           <canvas id="donutChart" />
         </div>
       </div>
+      <van-empty
+        :description="`暂无${curPayType === 'expense' ? '支出' : '收入'}账单`"
+        v-if="!curTotal"
+      >
+        <van-button
+          round
+          type="danger"
+          class="bottom-button"
+          @click="router.push('/')"
+        >
+          去添加</van-button
+        >
+      </van-empty>
     </div>
   </div>
   <!-- 账单时间弹窗 -->
@@ -291,6 +308,10 @@ watchEffect(() => {
       #donutChart {
         margin-bottom: 40px;
       }
+    }
+    .bottom-button {
+      width: 160px;
+      height: 40px;
     }
   }
 }
