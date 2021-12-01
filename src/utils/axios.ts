@@ -39,7 +39,9 @@ const request = async <T = any>(
   }
   if (data.code != 200) {
     if (data.message) Toast.fail(data.message);
+    // 401，token 过期
     if (data.code == 401) {
+      localStorage.removeItem("token");
       location.href = "#/login";
     }
     return Promise.reject(data);

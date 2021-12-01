@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
 import Login, { API as LoginAPI } from "./components/Login.vue";
 import Register from "./components/Register.vue";
-
+const router = useRouter();
+onBeforeMount(() => {
+  if (localStorage.getItem("token")) router.push("/");
+});
 const refLogin = ref<LoginAPI | undefined>();
 const activeTab = ref<string>("login");
 const regSuccess = (val: string) => {
