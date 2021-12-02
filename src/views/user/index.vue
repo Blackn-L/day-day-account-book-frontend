@@ -83,7 +83,7 @@ const loginOut = () => {
   align-items: stretch;
   padding: 3%;
   font-size: 18px;
-  background: url("@/assets/user.jpeg") no-repeat;
+  background: url("@/assets/user.jpeg") repeat;
   .header {
     display: grid;
     grid-template-columns: repeat(3, 2fr);
