@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
+const { title } = defineProps<{
+  title: string;
+}>();
 const onClickLeft = () => history.back();
 </script>
 
 <template>
   <van-nav-bar
-    title="账单详情"
+    :title="title"
     left-text="返回"
     left-arrow
     @click-left="onClickLeft"

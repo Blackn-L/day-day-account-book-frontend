@@ -97,7 +97,7 @@ const handleBillUpdated = () => {
 </script>
 
 <template>
-  <Header />
+  <Header title="账单详情" />
   <div class="detail" v-if="Object.keys(detail).length">
     <div>
       <van-tag
