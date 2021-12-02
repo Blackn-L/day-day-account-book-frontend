@@ -25,6 +25,12 @@ const routes = [
     component: () => import("@/views/bill/components/BillDetail.vue"),
     meta: { checkAuth: true },
   },
+  {
+    path: "/edit-password",
+    name: "edit-password",
+    component: () => import("@/views/user/components/EditPassword.vue"),
+    meta: { checkAuth: true },
+  },
   // 任意未定义路由直接重定向到 /
   // vue-router 4.x 删除了 *（星标或通配符）路由
   // 需要使用自定义的 regex 参数来定义所有路由(*、/*)：
