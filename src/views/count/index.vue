@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watchEffect, computed } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
@@ -30,6 +30,7 @@ const incomeClass = computed(() => {
 const handelChangeDate = (date: Date) => {
   if (refPopDate.value) refPopDate.value.showDate = false;
   selectedDate.value = date;
+  regGetMonthBillData();
 };
 
 const regGetMonthBillData = async () => {
@@ -38,7 +39,9 @@ const regGetMonthBillData = async () => {
     if (code === 200) Object.assign(billMonthData, data);
   } catch (error) {
   } finally {
-    initChart();
+    setTimeout(() => {
+      initChart();
+    }, 300);
   }
 };
 
@@ -86,7 +89,12 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   chart
     .interval()
     .position("a*percent")
-    .color("name", ["#FE5D4D", "#3BA4FF", "#737DDE"])
+    .color(
+      "name",
+      type === "expense_list"
+        ? ["#096dd9", "#2f54eb", "#1890ff", "#40a9ff", "#91d5ff", "#e6f7ff"]
+        : ["#d4b106", "#d48806", "#fadb14", "#ffc53d", "#ffe58f", "#feffe6"]
+    )
     .adjust("stack");
 
   chart.guide().text({
@@ -105,7 +113,7 @@ const changeCurType = (type: "expense" | "income") => {
   initChart(type === "expense" ? "expense_list" : "income_list");
 };
 
-watchEffect(() => {
+onMounted(() => {
   regGetMonthBillData();
 });
 </script>
@@ -148,7 +156,12 @@ watchEffect(() => {
       </div>
       <div v-if="curTotal > 0">
         <div class="main-header">
-          <van-tag mark type="success" size="large">进度条</van-tag>
+          <van-tag
+            mark
+            :type="curPayType === 'expense' ? 'success' : 'warning'"
+            size="large"
+            >进度条</van-tag
+          >
         </div>
         <div class="content">
           <div
@@ -164,6 +177,7 @@ watchEffect(() => {
             </div>
             <div class="process">
               <van-progress
+                :color="curPayType === 'expense' ? '#1989fa' : '#d4b106'"
                 :percentage="((item.total_amount / curTotal) * 100).toFixed(2)"
                 stroke-width="8"
               />
@@ -173,7 +187,12 @@ watchEffect(() => {
       </div>
       <div v-if="curTotal > 0">
         <div class="main-header">
-          <van-tag mark type="success" size="large">环形图</van-tag>
+          <van-tag
+            mark
+            :type="curPayType === 'expense' ? 'success' : 'warning'"
+            size="large"
+            >环形图</van-tag
+          >
         </div>
         <div class="content">
           <canvas id="donutChart" />
@@ -209,7 +228,7 @@ watchEffect(() => {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 20px 0 0;
     margin: 10px 20px;
     font-size: 13px;
     font-weight: 500;
