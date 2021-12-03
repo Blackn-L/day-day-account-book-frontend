@@ -26,9 +26,9 @@ const routes = [
     meta: { checkAuth: true },
   },
   {
-    path: "/edit-password",
-    name: "edit-password",
-    component: () => import("@/views/user/components/EditPassword.vue"),
+    path: "/update-password",
+    name: "update-password",
+    component: () => import("@/views/user/components/UpdatePassword.vue"),
     meta: { checkAuth: true },
   },
   // 任意未定义路由直接重定向到 /

@@ -16,9 +16,8 @@ const editUserinfo = () => {
 
 // 修改密码
 const editPassword = () => {
-  console.log("editPassword");
   router.push({
-    path: "/edit-password",
+    path: "/update-password",
   });
 };
 
