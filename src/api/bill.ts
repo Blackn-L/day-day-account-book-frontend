@@ -56,7 +56,7 @@ export function getBillDetail(id: number) {
 export function updateBill(params: BillItem) {
   return request({
     url: "/bill/update",
-    method: "post",
+    method: "put",
     data: params,
   });
 }
@@ -65,7 +65,7 @@ export function updateBill(params: BillItem) {
 export function deleteBill(id: number) {
   return request({
     url: `/bill/delete?id=${id}`,
-    method: "get",
+    method: "delete",
   });
 }
 
