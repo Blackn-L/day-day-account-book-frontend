@@ -229,7 +229,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 20px 0 0;
-    margin: 10px 20px;
+    margin: 10px 20px 5px;
     font-size: 13px;
     font-weight: 500;
     .date {
@@ -300,7 +300,7 @@ onMounted(() => {
       }
     }
     .main-header {
-      margin: 13px 0;
+      margin: 10px 0;
     }
     .content {
       display: flex;
@@ -313,7 +313,7 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         margin: 5px 0;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         .title {
           flex: 2;
           display: flex;
@@ -325,7 +325,7 @@ onMounted(() => {
         }
       }
       #donutChart {
-        margin-bottom: 40px;
+        // margin-bottom: 25px;
       }
     }
     .bottom-button {
