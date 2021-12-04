@@ -22,7 +22,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
     let { data, message } = await login(values);
     if (data.token) {
       localStorage.setItem("token", data.token);
-      Toast.success(message);
+      Toast.success({ message, duration: 600 });
       setTimeout(() => {
         router.push("/");
       }, 500);
@@ -39,7 +39,12 @@ defineExpose({
 </script>
 
 <template>
-  <van-form @submit="onSubmit" :readonly="buttonLoading" validate-trigger="onSubmit" label-width="50px">
+  <van-form
+    @submit="onSubmit"
+    :readonly="buttonLoading"
+    validate-trigger="onSubmit"
+    label-width="50px"
+  >
     <van-cell-group inset>
       <van-field
         v-model="username"
