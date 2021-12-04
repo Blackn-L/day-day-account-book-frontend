@@ -228,7 +228,7 @@ onMounted(() => {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0 0;
+    padding: 10px 0 0;
     margin: 10px 20px 5px;
     font-size: 13px;
     font-weight: 500;
