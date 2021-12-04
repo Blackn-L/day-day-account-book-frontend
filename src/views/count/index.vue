@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
-import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
+import PopDate, { API as PopDateAPI } from "@/components/PopDate/index.vue";
 import F2 from "@antv/f2";
 const router = useRouter();
 const refPopDate = ref<PopDateAPI | undefined>();

@@ -3,7 +3,7 @@ import { ref, computed, watch, reactive } from "vue";
 import { Toast } from "vant";
 import dayjs from "dayjs";
 import type { BillType, BillItem } from "../index";
-import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
+import PopDate, { API as PopDateAPI } from "@/components/PopDate/index.vue";
 import { addBill, updateBill } from "@/api/bill";
 const { types, defaultData } = defineProps<{
   types: BillType[];

@@ -3,7 +3,7 @@ import { ref, reactive } from "vue";
 import BillTypes from "./components/BillTypes.vue";
 import BillItem from "./components/BillItem.vue";
 import AddBill from "./components/AddBill.vue";
-import PopDate, { API as PopDateAPI } from "@/components/PopDate.vue";
+import PopDate, { API as PopDateAPI } from "@/components/PopDate/index.vue";
 import dayjs from "dayjs";
 import { getBillList } from "@/api/bill";
 import type { BillType, Bill } from "./index";

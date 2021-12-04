@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { DatetimePickerColumnType } from "./index";
+import type { DatetimePickerColumnType } from "../index";
 export interface API {
   showDate: Boolean;
 }

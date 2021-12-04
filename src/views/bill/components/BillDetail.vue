@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Toast } from "vant";
-import Header from "@/components/Header.vue";
+import Header from "@/components/Header/index.vue";
 import AddBill from "./AddBill.vue";
 import { getBillDetail, deleteBill } from "@/api/bill";
 import type { BillItem } from "../index";
