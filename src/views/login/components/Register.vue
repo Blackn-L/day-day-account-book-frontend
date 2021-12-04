@@ -53,8 +53,8 @@ const changeLeftIcon = (
     if (val.length === 0) {
       showLeftIcon[type] = LeftIconType.CIRCLE;
     } else {
-      // 输入状态 loading, 如果是失焦后触发的，就显示 CLEAR
-      showLeftIcon[type] = isBlur ? LeftIconType.CLEAR : LeftIconType.LOADING;
+      // 输入状态 loading, 如果是失焦后触发或者长度超 20 的，就显示 CLEAR
+      showLeftIcon[type] = isBlur || val.length > 20 ? LeftIconType.CLEAR : LeftIconType.LOADING;
     }
   }
   return true;
@@ -73,7 +73,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
         emit("toLogin", username.value);
         username.value = "";
         password.value = "";
-      }, 500);
+      }, 700);
     }
   } catch (error) {
     console.log("error: ", error);
