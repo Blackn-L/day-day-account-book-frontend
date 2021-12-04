@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import { updatePassword } from "@/api/user";
 import { useRouter } from "vue-router";
-import Header from "@/components/Header.vue";
+import Header from "@/components/Header/index.vue";
 import { Toast } from "vant";
+import { tools } from "@/utils/index";
 const router = useRouter();
 const oldPassword = ref("");
 const newPassword = ref("");
@@ -13,6 +14,10 @@ const validatorRepeatPassword = (value: string) => {
   return value === newPassword.value;
 };
 const onSubmit = async () => {
+  if (!oldPassword.value.trim() || !newPassword.value?.trim()) {
+    Toast.fail("输入不能为空");
+    return;
+  }
   buttonLoading.value = true;
   try {
     const { message, code } = await updatePassword({
@@ -36,7 +41,11 @@ const onSubmit = async () => {
 <template>
   <Header title="修改密码" />
   <div class="main">
-    <van-form @submit="onSubmit">
+    <van-form
+      @submit="onSubmit"
+      :readonly="buttonLoading"
+      validate-trigger="onSubmit"
+    >
       <van-cell-group inset>
         <van-field
           v-model="oldPassword"
@@ -44,7 +53,10 @@ const onSubmit = async () => {
           name="密码"
           label="密码"
           placeholder="请输入旧密码"
-          :rules="[{ required: true, message: '请填写旧密码' }]"
+          :rules="[{ required: true, message: '请填写旧密码' },{
+            validator: (val:string) => tools.useCheckPassword(val),
+            message: '密码格式错误',
+          },]"
         />
         <van-field
           v-model="newPassword"
@@ -52,7 +64,10 @@ const onSubmit = async () => {
           name="密码"
           label="新密码"
           placeholder="请输入新密码"
-          :rules="[{ required: true, message: '请填写新密码' }]"
+          :rules="[{ required: true, message: '请填写新密码' },{
+            validator: (val:string) => tools.useCheckPassword(val),
+            message: '密码格式错误',
+          },]"
         />
         <van-field
           v-model="repeatPassword"
@@ -65,7 +80,10 @@ const onSubmit = async () => {
             {
               validator: validatorRepeatPassword,
               message: '两次密码不一致',
-            },
+            },{
+            validator: (val:string) => tools.useCheckPassword(val),
+            message: '密码格式错误',
+          },
           ]"
         />
       </van-cell-group>
