@@ -9,6 +9,11 @@ const userinfo = reactive({
   avatar:
     "https://cdn.jsdelivr.net/gh/Blackn-L/Picture/blog/20211003210108.png",
 });
+
+// 修改个性签名
+const editSignature = () =>{
+  console.log('修改签名')
+}
 // 个人信息修改
 const editUserinfo = () => {
   console.log("editUserinfo");
@@ -54,7 +59,8 @@ const loginOut = () => {
         <span> {{ userinfo.name }} </span>
       </div>
       <div class="header-signature">
-        <span>{{ userinfo.signature }}</span>
+        <span style="margin-right: 10px;">{{ userinfo.signature }} <van-icon name="edit" @click="editSignature"/></span>
+       
       </div>
     </div>
     <div class="content">
