@@ -28,6 +28,7 @@ import {
   Progress,
   Image as VanImage,
   Loading,
+  Dialog,
 } from "vant";
 import router from "./router";
 
@@ -58,6 +59,7 @@ app
   .use(SwipeCell)
   .use(Progress)
   .use(VanImage)
-  .use(Loading);
+  .use(Loading)
+  .use(Dialog);
 app.use(router);
 app.mount("#app");

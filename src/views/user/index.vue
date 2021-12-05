@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { Toast } from "vant";
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+const canEditSignature = ref(false);
 const userinfo = reactive({
   name: "admin",
   signature: "hi,world, just do what u like",
+  newSignature: "",
   avatar:
     "https://cdn.jsdelivr.net/gh/Blackn-L/Picture/blog/20211003210108.png",
 });
 
 // 修改个性签名
-const editSignature = () =>{
-  console.log('修改签名')
-}
+const editSignature = () => {
+  console.log("修改签名");
+  userinfo.signature = userinfo.newSignature;
+  canEditSignature.value = false;
+};
 // 个人信息修改
 const editUserinfo = () => {
   console.log("editUserinfo");
@@ -59,8 +63,13 @@ const loginOut = () => {
         <span> {{ userinfo.name }} </span>
       </div>
       <div class="header-signature">
-        <span style="margin-right: 10px;">{{ userinfo.signature }} <van-icon name="edit" @click="editSignature"/></span>
-       
+        <span
+          >{{ userinfo.signature }}
+          <van-icon
+            style="margin-left: 5px"
+            name="edit"
+            @click="canEditSignature = true"
+        /></span>
       </div>
     </div>
     <div class="content">
@@ -81,6 +90,18 @@ const loginOut = () => {
       >
     </div>
   </div>
+  <van-dialog
+    v-model:show="canEditSignature"
+    title="标题"
+    show-cancel-button
+    @confirm="editSignature"
+  >
+    <van-field
+      v-model="userinfo.newSignature"
+      placeholder="请输入个性签名"
+      clearable
+    />
+  </van-dialog>
 </template>
 
 <style lang="less" scoped>
