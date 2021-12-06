@@ -34,7 +34,7 @@ const routes = [
   {
     path: "/upload-avatar",
     name: "upload-avatar",
-    component: () => import("@/views/user/components/uploadAvatar.vue"),
+    component: () => import("@/views/user/components/UploadAvatar.vue"),
     meta: { checkAuth: true },
   },
   // 任意未定义路由直接重定向到 /
