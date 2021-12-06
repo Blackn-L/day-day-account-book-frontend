@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Toast, Notify } from "vant";
+import type { ActionSheetAction } from "vant";
 import { ref, reactive, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getUserInfo, editUserInfo } from "@/api/user";
@@ -11,6 +12,14 @@ const userinfo = reactive({
   newSignature: "",
   avatar: "",
 });
+const showAction = ref(false);
+const actions = [{ name: "更换头像" }];
+const onSelectAction = (item: ActionSheetAction) => {
+  if (item.name === "更换头像") {
+    showAction.value = false;
+    router.push("/upload-avatar");
+  }
+};
 
 // 获取用户信息
 onMounted(async () => {
@@ -19,6 +28,11 @@ onMounted(async () => {
   userinfo.signature = data.signature;
   userinfo.avatar = data.avatar;
 });
+
+// 点击头像，更换头像
+const clickAvatar = () => {
+  showAction.value = true;
+};
 
 // 修改个性签名
 const editSignature = async (action: string) => {
@@ -94,6 +108,7 @@ watchEffect(() => {
           height="80"
           :src="userinfo.avatar"
           alt="头像"
+          @click="clickAvatar"
         />
       </div>
       <div class="header-name">
@@ -137,6 +152,13 @@ watchEffect(() => {
       >
     </div>
   </div>
+  <van-action-sheet
+    v-model:show="showAction"
+    :actions="actions"
+    cancel-text="取消"
+    close-on-click-action
+    @select="onSelectAction"
+  />
   <van-dialog
     v-model:show="canEditSignature"
     title="标题"

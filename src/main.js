@@ -30,6 +30,8 @@ import {
   Loading,
   Dialog,
   Notify,
+  ActionSheet,
+  Uploader,
 } from "vant";
 import router from "./router";
 
@@ -62,6 +64,8 @@ app
   .use(VanImage)
   .use(Loading)
   .use(Dialog)
-  .use(Notify);
+  .use(Notify)
+  .use(ActionSheet)
+  .use(Uploader);
 app.use(router);
 app.mount("#app");
