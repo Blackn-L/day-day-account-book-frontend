@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Toast } from "vant";
+import { Toast, Notify } from "vant";
 import { ref, reactive, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getUserInfo, editUserInfo } from "@/api/user";
@@ -43,21 +43,28 @@ const editSignature = async (action: string) => {
     return true;
   }
 };
-// 个人信息修改
-const editUserinfo = () => {
-  console.log("editUserinfo");
+// 跳转项目地址
+const clickProjectLink = () => {
+  Notify({
+    type: "warning",
+    message: "跳转 ing，感谢老板点 Star",
+    duration: 1000,
+  });
+  setTimeout(() => {
+    window.location.href =
+      "https://github.com/Blackn-L/day-day-account-book-frontend";
+  }, 1000);
 };
-
 // 修改密码
-const editPassword = () => {
+const clickEditPassword = () => {
   router.push({
     path: "/update-password",
   });
 };
 
 // 关于我
-const aboutMe = () => {
-  console.log("aboutMe");
+const clickAboutMe = () => {
+  Toast("没啥用，就好看");
 };
 
 // 退出登录
@@ -104,14 +111,24 @@ watchEffect(() => {
     </div>
     <div class="content">
       <van-cell-group inset>
-        <van-cell
+        <!-- <van-cell
           title="个人信息"
           icon="user-circle-o"
           is-link
-          @click="editUserinfo"
+        /> -->
+        <van-cell
+          title="项目地址"
+          icon="like-o"
+          is-link
+          @click="clickProjectLink"
         />
-        <van-cell title="修改密码" icon="edit" is-link @click="editPassword" />
-        <van-cell title="关于" icon="info-o" is-link @click="aboutMe" />
+        <van-cell
+          title="修改密码"
+          icon="edit"
+          is-link
+          @click="clickEditPassword"
+        />
+        <van-cell title="关于我" icon="info-o" is-link @click="clickAboutMe" />
       </van-cell-group>
     </div>
     <div class="footer">
