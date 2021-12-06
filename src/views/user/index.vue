@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Toast } from "vant";
-import { ref, reactive } from "vue";
+import { ref, reactive, watchEffect } from "vue";
 import { useRouter } from "vue-router";
+import { editUserInfo } from "@/api/user";
 const router = useRouter();
 const canEditSignature = ref(false);
 const userinfo = reactive({
@@ -13,10 +14,27 @@ const userinfo = reactive({
 });
 
 // 修改个性签名
-const editSignature = () => {
-  console.log("修改签名");
-  userinfo.signature = userinfo.newSignature;
-  canEditSignature.value = false;
+const editSignature = async (action: string) => {
+  console.log("action: ", action);
+  if (action === "cancel") {
+    canEditSignature.value = false;
+    return false;
+  }
+
+  try {
+    const { code, data } = await editUserInfo({
+      signature: userinfo.newSignature,
+    });
+    if (code === 200) {
+      Toast.success("修改成功");
+      userinfo.signature = data.signature;
+    }
+  } catch (error) {
+    console.log("error: ", error);
+  } finally {
+    canEditSignature.value = false;
+    return true;
+  }
 };
 // 个人信息修改
 const editUserinfo = () => {
@@ -44,6 +62,11 @@ const loginOut = () => {
     router.push("/login");
   }, 1000);
 };
+
+// 每次打开弹窗都清空输入框
+watchEffect(() => {
+  if (canEditSignature.value) userinfo.newSignature = "";
+});
 </script>
 
 <template>
@@ -94,7 +117,8 @@ const loginOut = () => {
     v-model:show="canEditSignature"
     title="标题"
     show-cancel-button
-    @confirm="editSignature"
+    @confirm="canEditSignature = false"
+    :beforeClose="editSignature"
   >
     <van-field
       v-model="userinfo.newSignature"
