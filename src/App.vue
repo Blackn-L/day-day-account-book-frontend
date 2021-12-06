@@ -7,7 +7,12 @@ import { useRoute } from "vue-router";
 const showTabbar = ref(true);
 const route = useRoute();
 // 不需要展示标签栏的路由
-const noShowTabbarRouteList = ["/login", "/detail"];
+const noShowTabbarRouteList = [
+  "/login",
+  "/detail",
+  "/update-password",
+  "/upload-avatar",
+];
 watchEffect(() => {
   showTabbar.value = !noShowTabbarRouteList.includes(route.path);
 });
