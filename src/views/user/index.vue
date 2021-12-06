@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { Toast } from "vant";
-import { ref, reactive, watchEffect } from "vue";
+import { ref, reactive, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { editUserInfo } from "@/api/user";
+import { getUserInfo, editUserInfo } from "@/api/user";
 const router = useRouter();
 const canEditSignature = ref(false);
 const userinfo = reactive({
-  name: "admin",
-  signature: "hi,world, just do what u like",
+  username: "",
+  signature: "",
   newSignature: "",
-  avatar:
-    "https://cdn.jsdelivr.net/gh/Blackn-L/Picture/blog/20211003210108.png",
+  avatar: "",
+});
+
+// 获取用户信息
+onMounted(async () => {
+  const { data } = await getUserInfo();
+  userinfo.username = data.username;
+  userinfo.signature = data.signature;
+  userinfo.avatar = data.avatar;
 });
 
 // 修改个性签名
@@ -83,7 +90,7 @@ watchEffect(() => {
         />
       </div>
       <div class="header-name">
-        <span> {{ userinfo.name }} </span>
+        <span> {{ userinfo.username }} </span>
       </div>
       <div class="header-signature">
         <span
