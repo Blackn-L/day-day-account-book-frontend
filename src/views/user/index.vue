@@ -23,11 +23,14 @@ const onSelectAction = (item: ActionSheetAction) => {
 
 // 获取用户信息
 onMounted(async () => {
+  initUserData();
+});
+const initUserData = async () => {
   const { data } = await getUserInfo();
   userinfo.username = data.username;
   userinfo.signature = data.signature;
   userinfo.avatar = data.avatar;
-});
+};
 
 // 点击头像，更换头像
 const clickAvatar = () => {
