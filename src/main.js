@@ -32,6 +32,7 @@ import {
   Notify,
   ActionSheet,
   Uploader,
+  Lazyload,
 } from "vant";
 import router from "./router";
 
@@ -66,6 +67,9 @@ app
   .use(Dialog)
   .use(Notify)
   .use(ActionSheet)
-  .use(Uploader);
+  .use(Uploader)
+  .use(Lazyload, {
+    lazyComponent: true,
+  });
 app.use(router);
 app.mount("#app");

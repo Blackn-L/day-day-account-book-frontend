@@ -7,7 +7,8 @@ interface LoginData {
   token: string;
 }
 interface editParams {
-  signature: string;
+  signature?: string;
+  avatar?: string;
 }
 interface editData {
   id: number;
