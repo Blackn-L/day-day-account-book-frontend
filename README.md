@@ -48,7 +48,7 @@ http://ab.svip52.com
   - [x] 无数据页面
 * 个人中心(开发 ing)
   - [x] 修改签名
-  - [ ] 修改头像（头像存于 Github，通过 jsdelivr 加速访问）
+  - [x] 修改头像（头像存于 Github，通过 jsdelivr 加速访问）
   - [x] 项目地址
   - [x] 修改密码
   - [x] test 账号无法修改密码
