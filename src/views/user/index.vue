@@ -164,7 +164,7 @@ watchEffect(() => {
   />
   <van-dialog
     v-model:show="canEditSignature"
-    title="标题"
+    title="修改个签"
     show-cancel-button
     @confirm="canEditSignature = false"
     :beforeClose="editSignature"
