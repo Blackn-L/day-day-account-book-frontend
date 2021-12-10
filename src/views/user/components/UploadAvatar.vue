@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import Header from "@/components/Header/index.vue";
 import { editUserInfo } from "@/api/user";
 const router = useRouter();
-const avatarList = reactive({
+const avatarList = {
   dog: [
     {
       name: "dog1",
@@ -106,21 +106,30 @@ const avatarList = reactive({
       url: "https://cdn.jsdelivr.net/gh/Blackn-L/Picture/blog/20211209231553.jpeg",
     },
   ],
-});
+};
+
+const showDialog = ref(false); // 显示确认框
+const selectedAvatar = ref(""); // 选中的头像
 
 const clickImg = (url: string) => {
-  console.log(url);
-  reqEditUserInfo(url);
+  selectedAvatar.value = url;
+  showDialog.value = true;
 };
 
 // 更换头像
-const reqEditUserInfo = async (avatar: string) => {
-  const { code } = await editUserInfo({ avatar });
-  if (code === 200) {
-    Toast.success("头像更换成功");
-    setTimeout(() => {
-      router.push("/user");
-    }, 1000);
+const reqEditUserInfo = async () => {
+  try {
+    const { code } = await editUserInfo({ avatar: selectedAvatar.value });
+    if (code === 200) {
+      Toast.success("头像更换成功");
+      setTimeout(() => {
+        router.push("/user");
+      }, 1000);
+    }
+  } catch (error) {
+    console.log("error: ", error);
+  } finally {
+    showDialog.value = false;
   }
 };
 </script>
@@ -164,6 +173,26 @@ const reqEditUserInfo = async (avatar: string) => {
         </van-image>
       </div>
     </div>
+    <van-dialog
+      v-model:show="showDialog"
+      title="确认更换该头像？"
+      show-cancel-button
+      round-button
+      @confirm="reqEditUserInfo"
+    >
+      <div class="dig-content">
+        <van-image
+          style="border: 2px solid #fff"
+          round
+          fit="contain"
+          width="80"
+          height="80"
+          :src="selectedAvatar"
+          alt="dog"
+          lazy-load
+        />
+      </div>
+    </van-dialog>
   </div>
 </template>
 
@@ -180,5 +209,11 @@ const reqEditUserInfo = async (avatar: string) => {
     place-items: center center;
     gap: 20px 10px;
   }
+}
+.dig-content {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
