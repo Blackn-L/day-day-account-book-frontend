@@ -50,7 +50,7 @@ defineExpose({
         v-model="username"
         name="username"
         label="用户名"
-        placeholder="输入用户名"
+        placeholder="测试账号: test"
         clearable
         :rules="[
           { required: true, message: '请填写用户名' },
@@ -64,7 +64,7 @@ defineExpose({
         v-model="password"
         type="password"
         name="password"
-        placeholder="输入密码"
+        placeholder="测试密码: test1234"
         label="密码"
         clearable
         :rules="[
