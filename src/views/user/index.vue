@@ -81,7 +81,8 @@ const clickEditPassword = () => {
 
 // 关于我
 const clickAboutMe = () => {
-  Toast("没啥用，就好看");
+  window.location.href =
+    "https://github.com/Blackn-L";
 };
 
 // 退出登录
