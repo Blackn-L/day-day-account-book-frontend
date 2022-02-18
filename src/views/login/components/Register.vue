@@ -88,7 +88,7 @@ const onSubmit = async (values: LoginAndRegParams) => {
     @submit="onSubmit"
     :readonly="buttonLoading"
     validate-trigger="onSubmit"
-    label-width="50px"
+    label-width="65px"
   >
     <van-cell-group inset>
       <van-field
