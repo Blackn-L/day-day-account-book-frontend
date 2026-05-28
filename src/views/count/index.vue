@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import { getMonthBillData, GetBillMonthDataResponse } from "@/api/bill";
 import PopDate, { API as PopDateAPI } from "@/components/PopDate/index.vue";
-import F2 from "@antv/f2";
+import { Chart } from "@antv/f2";
 const router = useRouter();
 const refPopDate = ref<PopDateAPI | undefined>();
 const selectedDate = ref(new Date());
@@ -61,14 +61,17 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
     });
   });
 
-  const chart = new F2.Chart({
-    id: "donutChart",
+  const canvas = document.getElementById("donutChart") as HTMLCanvasElement;
+  const context = canvas.getContext("2d")!;
+
+  const chart = new Chart({
+    context,
     pixelRatio: window.devicePixelRatio,
     padding: [5, "auto"],
   });
   chart.source(_data, {
     percent: {
-      formatter: function formatter(val) {
+      formatter: function formatter(val: number) {
         return val + "%";
       },
     },
@@ -76,7 +79,7 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
   chart.tooltip(false);
   chart.legend({
     position: "right",
-    itemFormatter: function itemFormatter(val) {
+    itemFormatter: function itemFormatter(val: string) {
       return val + "    " + _map[val];
     },
   });
@@ -97,7 +100,7 @@ const initChart = (type: "expense_list" | "income_list" = "expense_list") => {
     )
     .adjust("stack");
 
-  chart.guide().text({
+  chart.annotation().text({
     position: ["50%", "50%"],
     content: `￥${curTotal.value}`,
     style: {
